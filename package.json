@@ -1,5 +1,5 @@
 {
-  "name": "GradeBackend",
+  "name": "node-ts-backend",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -15,6 +15,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "nodemailer": "^6.3.1"
+    "request": "^2.88.0",
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
@@ -26,6 +27,7 @@
     "@types/morgan": "^1.7.37",
     "@types/node": "^12.11.1",
     "@types/nodemailer": "^6.2.1",
+    "@types/request": "^2.48.3",
     "@typescript-eslint/eslint-plugin-tslint": "^2.4.0",
     "@typescript-eslint/parser": "^2.4.0",
     "eslint": "^6.5.1",
