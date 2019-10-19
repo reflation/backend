@@ -2,8 +2,10 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import Mail from 'nodemailer/lib/mailer'
 
+import { TypeEnv } from './@types/env'
+
 dotenv.config()
-const { service, user, pass } = process.env
+const { service, user, pass }: TypeEnv = process.env
 
 type TypeMailContent = {
   to: string
