@@ -1,6 +1,6 @@
 import { TypeReq, TypeRes } from './@types/params'
 import { sendMail } from './mail'
-import { sign } from './jwt'
+import { create } from './jwt'
 import { isMailVail } from './auth'
 
 // Exported variable 'login' has or is using name 'e.Response' from external module "./node_modules/@types/express/index" but cannot be named in TS4023
