@@ -5,7 +5,7 @@ type TypeRes = {
   isUserExist?: 'Y'
 }
 
-export const isMailVail = (emailId: string) =>
+export const isNotVaild = (emailId: string) =>
   new Promise<boolean>((res, rej) => {
     request.post(
       'https://webmail.jejunu.ac.kr/idCheck.json',

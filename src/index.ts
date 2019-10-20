@@ -12,4 +12,4 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.post('/login', bodyParser.text({ type: 'text/plain' }), LoginRoute)
 
-app.listen(3000, () => console.log('server start'))
+export default app

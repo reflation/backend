@@ -2,10 +2,14 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import Mail from 'nodemailer/lib/mailer'
 
-import { TypeEnv } from './@types/env'
+// import { TypeEnv } from './@types/env'
 
 dotenv.config()
-const { service, user, pass }: TypeEnv = process.env
+// TODO FIX: Type 'ProcessEnv' is missing the following properties from type 'TypeEnv': service, user, pass, secret
+// const { service, user, pass }: TypeEnv = process.env
+const service = process.env.service!
+const user = process.env.user!
+const pass = process.env.pass!
 
 type TypeMailContent = {
   to: string
@@ -13,36 +17,17 @@ type TypeMailContent = {
   html?: string
 }
 
-// TODO: declare res function types into 'nodemailer/lib/mailer'
-// type TypeSendRes = {
-//   accept: string[]
-//   reject: [] | string[]
-//   envelopeTime: number
-//   messageTime: number
-//   messageSize: number
-//   response: string
-//   envelope: {
-//     // sender email
-//     from: string
-//     // recever email
-//     to: string[]
-//   }
-//   messageId: string
-// }
-
 const client = nodemailer.createTransport({
   service,
   auth: { user, pass },
 })
 
-export const sendMail = async ({ to, text, html }: TypeMailContent) => {
-  // @ts-ignore: Promise<any>
-  await client.sendMail({
-    from: `${service}@${user}.com`,
+// @ts-ignore: Promise<any>
+export const sendMail = ({ to, text, html }: TypeMailContent) =>
+  client.sendMail({
+    from: `${user}@${service}.com`,
     to,
     subject: '[dream-plus] 이메일 토큰',
     text,
     html: html || text,
   })
-  console.log(a)
-}
