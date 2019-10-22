@@ -2,7 +2,8 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 
-import { LoginRoute } from './routes'
+import { loginRoute, fetchRoute, GPARoute } from './routes'
+import { ensureAuth } from './jwt'
 
 const app = express()
 
@@ -10,6 +11,15 @@ const app = express()
 // app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-app.post('/login', bodyParser.text({ type: 'text/plain' }), LoginRoute)
+app.post('/login', bodyParser.text({ type: 'text/plain' }), loginRoute)
+
+app.post(
+  '/fetch',
+  bodyParser.urlencoded({ extended: false }),
+  ensureAuth,
+  fetchRoute
+)
+
+app.get('/GPA', ensureAuth, GPARoute)
 
 export default app
