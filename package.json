@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec ts-node -- bin/www.ts",
+    "start": "ts-node -- bin/www.ts",
+    "start:watch": "nodemon --exec ts-node -- bin/www.ts",
     "test": "jest",
     "build": "ts-node -- src/index.ts",
     "lint": "./node_modules/.bin/eslint src/index.ts"
