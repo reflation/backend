@@ -1,7 +1,11 @@
-import express from 'express'
+import { Request, Response } from 'express'
+import { Dictionary } from 'lodash'
+import { TypeUserNoPw } from './models'
 
-export interface TypeReq<T> extends express.Request {
+export interface TypeReq<T> extends Request {
   body: T
 }
 
-export type TypeRes = express.Response
+export interface TypeGeneric<T> {
+  body: T
+}
