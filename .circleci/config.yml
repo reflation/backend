@@ -1,0 +1,64 @@
+# ref: https://github.com/conventional-changelog/commitlint/blob/4360d5/.circleci/config.yml
+version: 2.1
+
+commands:
+  update-yarn:
+    steps:
+      - run:
+          name: Update yarn
+          command: yarn global add yarn@latest
+  install:
+    steps:
+      - run:
+          name: Install dependencies
+          command: yarn install
+  audit:
+    steps:
+      - run:
+          name: Audit dependencies
+          command: yarn audit
+  build:
+    steps:
+      - run:
+          name: Build packages
+          command: yarn build
+  lint:
+    steps:
+      - run:
+          name: Lint project
+          command: yarn lint
+  deps:
+    steps:
+      - run:
+          name: Check dependencies
+          command: yarn deps
+  test:
+    steps:
+      - run:
+          name: Test
+          command: yarn test
+  save-cache:
+    steps:
+      - save_cache:
+          key: v{{ .Environment.CIRCLE_CACHE_VERSION }}-{{ arch }}-npm-lock-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+  run-node:
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+      - update-yarn
+      - install
+      - save-cache
+      - build
+      - lint
+      - deps
+      - test
+jobs:
+  v10:
+    docker:
+      - image: node:10.15.2
+    steps:
+      - run-node
