@@ -8,7 +8,7 @@
     "start:watch": "nodemon --exec ts-node -- bin/www.ts",
     "test": "jest",
     "build": "ts-node -- src/index.ts",
-    "lint": "./node_modules/.bin/eslint src/index.ts"
+    "lint": "./node_modules/.bin/eslint src/index.ts src/index.test.ts"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
