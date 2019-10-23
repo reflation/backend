@@ -15,7 +15,8 @@
         "revert",
         "style",
         "test",
-        "hack"
+        "hack",
+        "merge"
       ]
     ]
   }
