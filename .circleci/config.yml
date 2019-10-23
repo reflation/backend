@@ -62,3 +62,8 @@ jobs:
       - image: node:10.15.2
     steps:
       - run-node
+
+workflows:
+  node:
+    jobs:
+      - v10
