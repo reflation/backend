@@ -27,11 +27,6 @@ commands:
       - run:
           name: Lint project
           command: yarn lint
-  deps:
-    steps:
-      - run:
-          name: Check dependencies
-          command: yarn deps
   test:
     steps:
       - run:
@@ -54,7 +49,6 @@ commands:
       - save-cache
       - build
       - lint
-      - deps
       - test
 jobs:
   v10:
