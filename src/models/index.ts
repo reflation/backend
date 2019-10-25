@@ -1,31 +1,24 @@
-import low from 'lowdb'
-import path from 'path'
-import FileSync from 'lowdb/adapters/FileSync'
+import { prisma } from './prisma'
 
 import { TypeUser } from '../@types/models'
 
-const db = low(new FileSync(path.resolve(__dirname, 'db.json')))
+export const createUser = prisma.createUser
 
-db.defaults({ user: [] }).write()
+export const searchUser = async (name: string): Promise<TypeUser> => {
+  const user = await prisma.user({ name }).$fragment(`
+  fragment TypeUser on User {
+    name
+    data
+  }
+  `)
+  if (!user) throw Error('No users found.')
+  return user as TypeUser
+}
 
-export const createUser = (data: TypeUser) =>
-  db
-    .get('user')
-    .push(data)
-    .write()
-
-export const searchUser = (name: string): TypeUser =>
-  db
-    .get('user')
-    .find({ name })
-    // @ts-ignore
-    .value()
-
-export const isUserNotExist = (name: string) => !searchUser(name)
+export const isUserExist = (name: string) => prisma.$exists.user({ name })
 
 export const appnedUserData = ({ name, data }: TypeUser) =>
-  db
-    .get('user')
-    .find({ name })
-    .assign({ data })
-    .write()
+  prisma.updateUser({
+    data: { data },
+    where: { name },
+  })
