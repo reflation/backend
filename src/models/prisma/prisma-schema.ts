@@ -3,6 +3,10 @@
 // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
 export const typeDefs = /* GraphQL */ `
+  type AggregateSemester {
+    count: Int!
+  }
+
   type AggregateUser {
     count: Int!
   }
@@ -16,6 +20,22 @@ export const typeDefs = /* GraphQL */ `
   scalar Long
 
   type Mutation {
+    createSemester(data: SemesterCreateInput!): Semester!
+    updateSemester(
+      data: SemesterUpdateInput!
+      where: SemesterWhereUniqueInput!
+    ): Semester
+    updateManySemesters(
+      data: SemesterUpdateManyMutationInput!
+      where: SemesterWhereInput
+    ): BatchPayload!
+    upsertSemester(
+      where: SemesterWhereUniqueInput!
+      create: SemesterCreateInput!
+      update: SemesterUpdateInput!
+    ): Semester!
+    deleteSemester(where: SemesterWhereUniqueInput!): Semester
+    deleteManySemesters(where: SemesterWhereInput): BatchPayload!
     createUser(data: UserCreateInput!): User!
     updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
     updateManyUsers(
@@ -49,6 +69,25 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Query {
+    semester(where: SemesterWhereUniqueInput!): Semester
+    semesters(
+      where: SemesterWhereInput
+      orderBy: SemesterOrderByInput
+      skip: Int
+      after: String
+      before: String
+      first: Int
+      last: Int
+    ): [Semester]!
+    semestersConnection(
+      where: SemesterWhereInput
+      orderBy: SemesterOrderByInput
+      skip: Int
+      after: String
+      before: String
+      first: Int
+      last: Int
+    ): SemesterConnection!
     user(where: UserWhereUniqueInput!): User
     users(
       where: UserWhereInput
@@ -71,15 +110,273 @@ export const typeDefs = /* GraphQL */ `
     node(id: ID!): Node
   }
 
+  type Semester {
+    id: ID!
+    averagePoint: Float!
+    totalCredit: Int!
+    isOutside: Boolean
+    year: Int!
+    semester: SemesterType!
+  }
+
+  type SemesterConnection {
+    pageInfo: PageInfo!
+    edges: [SemesterEdge]!
+    aggregate: AggregateSemester!
+  }
+
+  input SemesterCreateInput {
+    id: ID
+    averagePoint: Float!
+    totalCredit: Int!
+    isOutside: Boolean
+    year: Int!
+    semester: SemesterType!
+  }
+
+  input SemesterCreateManyInput {
+    create: [SemesterCreateInput!]
+    connect: [SemesterWhereUniqueInput!]
+  }
+
+  type SemesterEdge {
+    node: Semester!
+    cursor: String!
+  }
+
+  enum SemesterOrderByInput {
+    id_ASC
+    id_DESC
+    averagePoint_ASC
+    averagePoint_DESC
+    totalCredit_ASC
+    totalCredit_DESC
+    isOutside_ASC
+    isOutside_DESC
+    year_ASC
+    year_DESC
+    semester_ASC
+    semester_DESC
+  }
+
+  type SemesterPreviousValues {
+    id: ID!
+    averagePoint: Float!
+    totalCredit: Int!
+    isOutside: Boolean
+    year: Int!
+    semester: SemesterType!
+  }
+
+  input SemesterScalarWhereInput {
+    id: ID
+    id_not: ID
+    id_in: [ID!]
+    id_not_in: [ID!]
+    id_lt: ID
+    id_lte: ID
+    id_gt: ID
+    id_gte: ID
+    id_contains: ID
+    id_not_contains: ID
+    id_starts_with: ID
+    id_not_starts_with: ID
+    id_ends_with: ID
+    id_not_ends_with: ID
+    averagePoint: Float
+    averagePoint_not: Float
+    averagePoint_in: [Float!]
+    averagePoint_not_in: [Float!]
+    averagePoint_lt: Float
+    averagePoint_lte: Float
+    averagePoint_gt: Float
+    averagePoint_gte: Float
+    totalCredit: Int
+    totalCredit_not: Int
+    totalCredit_in: [Int!]
+    totalCredit_not_in: [Int!]
+    totalCredit_lt: Int
+    totalCredit_lte: Int
+    totalCredit_gt: Int
+    totalCredit_gte: Int
+    isOutside: Boolean
+    isOutside_not: Boolean
+    year: Int
+    year_not: Int
+    year_in: [Int!]
+    year_not_in: [Int!]
+    year_lt: Int
+    year_lte: Int
+    year_gt: Int
+    year_gte: Int
+    semester: SemesterType
+    semester_not: SemesterType
+    semester_in: [SemesterType!]
+    semester_not_in: [SemesterType!]
+    AND: [SemesterScalarWhereInput!]
+    OR: [SemesterScalarWhereInput!]
+    NOT: [SemesterScalarWhereInput!]
+  }
+
+  type SemesterSubscriptionPayload {
+    mutation: MutationType!
+    node: Semester
+    updatedFields: [String!]
+    previousValues: SemesterPreviousValues
+  }
+
+  input SemesterSubscriptionWhereInput {
+    mutation_in: [MutationType!]
+    updatedFields_contains: String
+    updatedFields_contains_every: [String!]
+    updatedFields_contains_some: [String!]
+    node: SemesterWhereInput
+    AND: [SemesterSubscriptionWhereInput!]
+    OR: [SemesterSubscriptionWhereInput!]
+    NOT: [SemesterSubscriptionWhereInput!]
+  }
+
+  enum SemesterType {
+    FIRST
+    SUMMER
+    SECOND
+    WINTER
+  }
+
+  input SemesterUpdateDataInput {
+    averagePoint: Float
+    totalCredit: Int
+    isOutside: Boolean
+    year: Int
+    semester: SemesterType
+  }
+
+  input SemesterUpdateInput {
+    averagePoint: Float
+    totalCredit: Int
+    isOutside: Boolean
+    year: Int
+    semester: SemesterType
+  }
+
+  input SemesterUpdateManyDataInput {
+    averagePoint: Float
+    totalCredit: Int
+    isOutside: Boolean
+    year: Int
+    semester: SemesterType
+  }
+
+  input SemesterUpdateManyInput {
+    create: [SemesterCreateInput!]
+    update: [SemesterUpdateWithWhereUniqueNestedInput!]
+    upsert: [SemesterUpsertWithWhereUniqueNestedInput!]
+    delete: [SemesterWhereUniqueInput!]
+    connect: [SemesterWhereUniqueInput!]
+    set: [SemesterWhereUniqueInput!]
+    disconnect: [SemesterWhereUniqueInput!]
+    deleteMany: [SemesterScalarWhereInput!]
+    updateMany: [SemesterUpdateManyWithWhereNestedInput!]
+  }
+
+  input SemesterUpdateManyMutationInput {
+    averagePoint: Float
+    totalCredit: Int
+    isOutside: Boolean
+    year: Int
+    semester: SemesterType
+  }
+
+  input SemesterUpdateManyWithWhereNestedInput {
+    where: SemesterScalarWhereInput!
+    data: SemesterUpdateManyDataInput!
+  }
+
+  input SemesterUpdateWithWhereUniqueNestedInput {
+    where: SemesterWhereUniqueInput!
+    data: SemesterUpdateDataInput!
+  }
+
+  input SemesterUpsertWithWhereUniqueNestedInput {
+    where: SemesterWhereUniqueInput!
+    update: SemesterUpdateDataInput!
+    create: SemesterCreateInput!
+  }
+
+  input SemesterWhereInput {
+    id: ID
+    id_not: ID
+    id_in: [ID!]
+    id_not_in: [ID!]
+    id_lt: ID
+    id_lte: ID
+    id_gt: ID
+    id_gte: ID
+    id_contains: ID
+    id_not_contains: ID
+    id_starts_with: ID
+    id_not_starts_with: ID
+    id_ends_with: ID
+    id_not_ends_with: ID
+    averagePoint: Float
+    averagePoint_not: Float
+    averagePoint_in: [Float!]
+    averagePoint_not_in: [Float!]
+    averagePoint_lt: Float
+    averagePoint_lte: Float
+    averagePoint_gt: Float
+    averagePoint_gte: Float
+    totalCredit: Int
+    totalCredit_not: Int
+    totalCredit_in: [Int!]
+    totalCredit_not_in: [Int!]
+    totalCredit_lt: Int
+    totalCredit_lte: Int
+    totalCredit_gt: Int
+    totalCredit_gte: Int
+    isOutside: Boolean
+    isOutside_not: Boolean
+    year: Int
+    year_not: Int
+    year_in: [Int!]
+    year_not_in: [Int!]
+    year_lt: Int
+    year_lte: Int
+    year_gt: Int
+    year_gte: Int
+    semester: SemesterType
+    semester_not: SemesterType
+    semester_in: [SemesterType!]
+    semester_not_in: [SemesterType!]
+    AND: [SemesterWhereInput!]
+    OR: [SemesterWhereInput!]
+    NOT: [SemesterWhereInput!]
+  }
+
+  input SemesterWhereUniqueInput {
+    id: ID
+  }
+
   type Subscription {
+    semester(where: SemesterSubscriptionWhereInput): SemesterSubscriptionPayload
     user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   }
 
   type User {
     id: ID!
     mailid: String!
+    name: String!
     createdAt: DateTime!
-    data: Float
+    averagePoint: Float!
+    semesters(
+      where: SemesterWhereInput
+      orderBy: SemesterOrderByInput
+      skip: Int
+      after: String
+      before: String
+      first: Int
+      last: Int
+    ): [Semester!]
   }
 
   type UserConnection {
@@ -91,7 +388,9 @@ export const typeDefs = /* GraphQL */ `
   input UserCreateInput {
     id: ID
     mailid: String!
-    data: Float
+    name: String!
+    averagePoint: Float
+    semesters: SemesterCreateManyInput
   }
 
   type UserEdge {
@@ -104,17 +403,20 @@ export const typeDefs = /* GraphQL */ `
     id_DESC
     mailid_ASC
     mailid_DESC
+    name_ASC
+    name_DESC
     createdAt_ASC
     createdAt_DESC
-    data_ASC
-    data_DESC
+    averagePoint_ASC
+    averagePoint_DESC
   }
 
   type UserPreviousValues {
     id: ID!
     mailid: String!
+    name: String!
     createdAt: DateTime!
-    data: Float
+    averagePoint: Float!
   }
 
   type UserSubscriptionPayload {
@@ -137,12 +439,15 @@ export const typeDefs = /* GraphQL */ `
 
   input UserUpdateInput {
     mailid: String
-    data: Float
+    name: String
+    averagePoint: Float
+    semesters: SemesterUpdateManyInput
   }
 
   input UserUpdateManyMutationInput {
     mailid: String
-    data: Float
+    name: String
+    averagePoint: Float
   }
 
   input UserWhereInput {
@@ -174,6 +479,20 @@ export const typeDefs = /* GraphQL */ `
     mailid_not_starts_with: String
     mailid_ends_with: String
     mailid_not_ends_with: String
+    name: String
+    name_not: String
+    name_in: [String!]
+    name_not_in: [String!]
+    name_lt: String
+    name_lte: String
+    name_gt: String
+    name_gte: String
+    name_contains: String
+    name_not_contains: String
+    name_starts_with: String
+    name_not_starts_with: String
+    name_ends_with: String
+    name_not_ends_with: String
     createdAt: DateTime
     createdAt_not: DateTime
     createdAt_in: [DateTime!]
@@ -182,14 +501,17 @@ export const typeDefs = /* GraphQL */ `
     createdAt_lte: DateTime
     createdAt_gt: DateTime
     createdAt_gte: DateTime
-    data: Float
-    data_not: Float
-    data_in: [Float!]
-    data_not_in: [Float!]
-    data_lt: Float
-    data_lte: Float
-    data_gt: Float
-    data_gte: Float
+    averagePoint: Float
+    averagePoint_not: Float
+    averagePoint_in: [Float!]
+    averagePoint_not_in: [Float!]
+    averagePoint_lt: Float
+    averagePoint_lte: Float
+    averagePoint_gt: Float
+    averagePoint_gte: Float
+    semesters_every: SemesterWhereInput
+    semesters_some: SemesterWhereInput
+    semesters_none: SemesterWhereInput
     AND: [UserWhereInput!]
     OR: [UserWhereInput!]
     NOT: [UserWhereInput!]

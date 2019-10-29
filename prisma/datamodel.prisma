@@ -1,6 +1,24 @@
 type User {
   id: ID! @id
   mailid: String! @unique
+  name: String!
   createdAt: DateTime! @createdAt
-  data: Float
+  averagePoint: Float! @default(value: 0.0)
+  semesters: [Semester!]!
+}
+
+enum SemesterType {
+  FIRST
+  SUMMER
+  SECOND
+  WINTER
+}
+
+type Semester {
+  id: ID! @id
+  averagePoint: Float!
+  totalCredit: Int!
+  isOutside: Boolean @default(value: false)
+  year: Int!
+  semester: SemesterType!
 }
