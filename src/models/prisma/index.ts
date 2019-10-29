@@ -881,7 +881,7 @@ export type Long = string
 
 export const models: Model[] = [
   {
-    mailid: 'User',
+    name: 'User',
     embedded: false,
   },
   {

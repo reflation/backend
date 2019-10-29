@@ -31,7 +31,8 @@ export const login = async (mailid: string) => {
   const mailAddress = `${mailid}@${domain}`
   if (await isNotVaild(mailAddress)) throw 401
   try {
-    if (!(await isUserExist(mailAddress))) await createUser({ mailid })
+    if (!(await isUserExist(mailAddress)))
+      await createUser({ mailid, name: mailid })
   } catch (e) {
     throw 501
   }

@@ -19,6 +19,6 @@ export const isUserExist = (mailid: string) => prisma.$exists.user({ mailid })
 
 export const appnedUserData = ({ mailid, data }: TypeUser) =>
   prisma.updateUser({
-    data: { data },
+    data: { averagePoint: data },
     where: { mailid },
   })
