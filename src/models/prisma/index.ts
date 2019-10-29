@@ -104,8 +104,8 @@ export interface ClientConstructor<T> {
 export type UserOrderByInput =
   | 'id_ASC'
   | 'id_DESC'
-  | 'name_ASC'
-  | 'name_DESC'
+  | 'mailid_ASC'
+  | 'mailid_DESC'
   | 'createdAt_ASC'
   | 'createdAt_DESC'
   | 'data_ASC'
@@ -115,7 +115,7 @@ export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED'
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>
-  name?: Maybe<String>
+  mailid?: Maybe<String>
 }>
 
 export interface UserWhereInput {
@@ -133,20 +133,20 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>
   id_ends_with?: Maybe<ID_Input>
   id_not_ends_with?: Maybe<ID_Input>
-  name?: Maybe<String>
-  name_not?: Maybe<String>
-  name_in?: Maybe<String[] | String>
-  name_not_in?: Maybe<String[] | String>
-  name_lt?: Maybe<String>
-  name_lte?: Maybe<String>
-  name_gt?: Maybe<String>
-  name_gte?: Maybe<String>
-  name_contains?: Maybe<String>
-  name_not_contains?: Maybe<String>
-  name_starts_with?: Maybe<String>
-  name_not_starts_with?: Maybe<String>
-  name_ends_with?: Maybe<String>
-  name_not_ends_with?: Maybe<String>
+  mailid?: Maybe<String>
+  mailid_not?: Maybe<String>
+  mailid_in?: Maybe<String[] | String>
+  mailid_not_in?: Maybe<String[] | String>
+  mailid_lt?: Maybe<String>
+  mailid_lte?: Maybe<String>
+  mailid_gt?: Maybe<String>
+  mailid_gte?: Maybe<String>
+  mailid_contains?: Maybe<String>
+  mailid_not_contains?: Maybe<String>
+  mailid_starts_with?: Maybe<String>
+  mailid_not_starts_with?: Maybe<String>
+  mailid_ends_with?: Maybe<String>
+  mailid_not_ends_with?: Maybe<String>
   createdAt?: Maybe<DateTimeInput>
   createdAt_not?: Maybe<DateTimeInput>
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>
@@ -170,17 +170,17 @@ export interface UserWhereInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>
-  name: String
+  mailid: String
   data?: Maybe<Float>
 }
 
 export interface UserUpdateInput {
-  name?: Maybe<String>
+  mailid?: Maybe<String>
   data?: Maybe<Float>
 }
 
 export interface UserUpdateManyMutationInput {
-  name?: Maybe<String>
+  mailid?: Maybe<String>
   data?: Maybe<Float>
 }
 
@@ -201,14 +201,14 @@ export interface NodeNode {
 
 export interface User {
   id: ID_Output
-  name: String
+  mailid: String
   createdAt: DateTimeOutput
   data?: Float
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>
-  name: () => Promise<String>
+  mailid: () => Promise<String>
   createdAt: () => Promise<DateTimeOutput>
   data: () => Promise<Float>
 }
@@ -217,7 +217,7 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>
-  name: () => Promise<AsyncIterator<String>>
+  mailid: () => Promise<AsyncIterator<String>>
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>
   data: () => Promise<AsyncIterator<Float>>
 }
@@ -226,7 +226,7 @@ export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>
-  name: () => Promise<String>
+  mailid: () => Promise<String>
   createdAt: () => Promise<DateTimeOutput>
   data: () => Promise<Float>
 }
@@ -351,7 +351,7 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output
-  name: String
+  mailid: String
   createdAt: DateTimeOutput
   data?: Float
 }
@@ -360,7 +360,7 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>
-  name: () => Promise<String>
+  mailid: () => Promise<String>
   createdAt: () => Promise<DateTimeOutput>
   data: () => Promise<Float>
 }
@@ -369,7 +369,7 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>
-  name: () => Promise<AsyncIterator<String>>
+  mailid: () => Promise<AsyncIterator<String>>
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>
   data: () => Promise<AsyncIterator<Float>>
 }
@@ -418,7 +418,7 @@ export type Long = string
 
 export const models: Model[] = [
   {
-    name: 'User',
+    mailid: 'User',
     embedded: false,
   },
 ]

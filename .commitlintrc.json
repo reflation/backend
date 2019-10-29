@@ -1,6 +1,19 @@
 {
   "extends": ["@commitlint/config-conventional"],
   "rules": {
+    "header-case": [
+      1,
+      "always",
+      [
+        "lower-case",
+        "camel-case",
+        "kebab-case",
+        "pascal-case",
+        "sentence-case",
+        "snake-case",
+        "start-case"
+      ]
+    ],
     "type-enum": [
       2,
       "always",
@@ -11,7 +24,7 @@
         "docs",
         "feat",
         "fix",
-        "refactor",
+        "refact",
         "revert",
         "style",
         "test",

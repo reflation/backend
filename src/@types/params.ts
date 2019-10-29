@@ -10,12 +10,12 @@ export interface TypeReq<T> extends Request {
   body: T
 }
 
-export interface TypeGeneric<T> {
+export interface TypeRes<T> extends Response {
   body: T
 }
 
 export type TypePayload = {
-  name: string
+  mailid: string
   iat: number
   exp: number
 }

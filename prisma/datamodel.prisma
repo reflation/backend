@@ -1,6 +1,6 @@
 type User {
   id: ID! @id
-  name: String! @unique
+  mailid: String! @unique
   createdAt: DateTime! @createdAt
   data: Float
 }

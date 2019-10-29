@@ -27,8 +27,8 @@ const sign = ({ payload }: { payload: string | object }) =>
     .digest('base64')
     .replace('=', '')
 
-export const signToken = (name: string) =>
-  jwt.sign({ name }, secret, { expiresIn })
+export const signToken = (mailid: string) =>
+  jwt.sign({ mailid }, secret, { expiresIn })
 
 const verify = (token: string) =>
   jwt.verify(token.replace(/^Bearer\s/, ''), secret)

@@ -77,7 +77,7 @@ export const typeDefs = /* GraphQL */ `
 
   type User {
     id: ID!
-    name: String!
+    mailid: String!
     createdAt: DateTime!
     data: Float
   }
@@ -90,7 +90,7 @@ export const typeDefs = /* GraphQL */ `
 
   input UserCreateInput {
     id: ID
-    name: String!
+    mailid: String!
     data: Float
   }
 
@@ -102,8 +102,8 @@ export const typeDefs = /* GraphQL */ `
   enum UserOrderByInput {
     id_ASC
     id_DESC
-    name_ASC
-    name_DESC
+    mailid_ASC
+    mailid_DESC
     createdAt_ASC
     createdAt_DESC
     data_ASC
@@ -112,7 +112,7 @@ export const typeDefs = /* GraphQL */ `
 
   type UserPreviousValues {
     id: ID!
-    name: String!
+    mailid: String!
     createdAt: DateTime!
     data: Float
   }
@@ -136,12 +136,12 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input UserUpdateInput {
-    name: String
+    mailid: String
     data: Float
   }
 
   input UserUpdateManyMutationInput {
-    name: String
+    mailid: String
     data: Float
   }
 
@@ -160,20 +160,20 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    name: String
-    name_not: String
-    name_in: [String!]
-    name_not_in: [String!]
-    name_lt: String
-    name_lte: String
-    name_gt: String
-    name_gte: String
-    name_contains: String
-    name_not_contains: String
-    name_starts_with: String
-    name_not_starts_with: String
-    name_ends_with: String
-    name_not_ends_with: String
+    mailid: String
+    mailid_not: String
+    mailid_in: [String!]
+    mailid_not_in: [String!]
+    mailid_lt: String
+    mailid_lte: String
+    mailid_gt: String
+    mailid_gte: String
+    mailid_contains: String
+    mailid_not_contains: String
+    mailid_starts_with: String
+    mailid_not_starts_with: String
+    mailid_ends_with: String
+    mailid_not_ends_with: String
     createdAt: DateTime
     createdAt_not: DateTime
     createdAt_in: [DateTime!]
@@ -197,6 +197,6 @@ export const typeDefs = /* GraphQL */ `
 
   input UserWhereUniqueInput {
     id: ID
-    name: String
+    mailid: String
   }
 `

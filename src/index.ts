@@ -11,7 +11,7 @@ const app = express()
 // app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-app.post('/login', bodyParser.text({ type: 'text/plain' }), loginRoute)
+app.post('/login', bodyParser.json(), loginRoute)
 
 app.post(
   '/fetch',
