@@ -324,7 +324,7 @@ export interface SemesterUpdateManyMutationInput {
 export interface UserCreateInput {
   id?: Maybe<ID_Input>
   mailid: String
-  name: String
+  name?: Maybe<String>
   averagePoint?: Maybe<Float>
   semesters?: Maybe<SemesterCreateManyInput>
 }
@@ -598,7 +598,7 @@ export interface AggregateSemesterSubscription
 export interface User {
   id: ID_Output
   mailid: String
-  name: String
+  name?: String
   createdAt: DateTimeOutput
   averagePoint: Float
 }
@@ -812,7 +812,7 @@ export interface UserSubscriptionPayloadSubscription
 export interface UserPreviousValues {
   id: ID_Output
   mailid: String
-  name: String
+  name?: String
   createdAt: DateTimeOutput
   averagePoint: Float
 }
@@ -901,6 +901,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `https://eu1.prisma.sh/dream-plus/backend/dev`,
+  endpoint: `http://localhost:4466`,
 })
 export const prisma = new Prisma()

@@ -1,7 +1,7 @@
 type User {
   id: ID! @id
   mailid: String! @unique
-  name: String!
+  name: String
   createdAt: DateTime! @createdAt
   averagePoint: Float! @default(value: 0.0)
   semesters: [Semester!]!

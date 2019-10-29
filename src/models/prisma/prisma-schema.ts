@@ -365,7 +365,7 @@ export const typeDefs = /* GraphQL */ `
   type User {
     id: ID!
     mailid: String!
-    name: String!
+    name: String
     createdAt: DateTime!
     averagePoint: Float!
     semesters(
@@ -388,7 +388,7 @@ export const typeDefs = /* GraphQL */ `
   input UserCreateInput {
     id: ID
     mailid: String!
-    name: String!
+    name: String
     averagePoint: Float
     semesters: SemesterCreateManyInput
   }
@@ -414,7 +414,7 @@ export const typeDefs = /* GraphQL */ `
   type UserPreviousValues {
     id: ID!
     mailid: String!
-    name: String!
+    name: String
     createdAt: DateTime!
     averagePoint: Float!
   }
