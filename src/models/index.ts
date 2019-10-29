@@ -5,14 +5,17 @@ import { TypeUser } from '../@types/models'
 export const createUser = prisma.createUser
 
 export const searchUser = async (mailid: string): Promise<TypeUser> => {
-  const user = await prisma.user({ mailid }).$fragment(`
+  const user = (await prisma.user({ mailid }).$fragment(`
   fragment TypeUser on User {
-    name
-    data
+    mailid
+    averagePoint
   }
-  `)
+  `)) as { mailid: string; averagePoint: number }
   if (!user) throw Error('No users found.')
-  return user as TypeUser
+  return {
+    mailid: user.mailid,
+    data: user.averagePoint,
+  }
 }
 
 export const isUserExist = (mailid: string) => prisma.$exists.user({ mailid })
