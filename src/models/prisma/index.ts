@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null
 
 export interface Exists {
+  semester: (where?: SemesterWhereInput) => Promise<boolean>
   user: (where?: UserWhereInput) => Promise<boolean>
 }
 
@@ -38,6 +39,25 @@ export interface Prisma {
    * Queries
    */
 
+  semester: (where: SemesterWhereUniqueInput) => SemesterNullablePromise
+  semesters: (args?: {
+    where?: SemesterWhereInput
+    orderBy?: SemesterOrderByInput
+    skip?: Int
+    after?: String
+    before?: String
+    first?: Int
+    last?: Int
+  }) => FragmentableArray<Semester>
+  semestersConnection: (args?: {
+    where?: SemesterWhereInput
+    orderBy?: SemesterOrderByInput
+    skip?: Int
+    after?: String
+    before?: String
+    first?: Int
+    last?: Int
+  }) => SemesterConnectionPromise
   user: (where: UserWhereUniqueInput) => UserNullablePromise
   users: (args?: {
     where?: UserWhereInput
@@ -63,6 +83,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createSemester: (data: SemesterCreateInput) => SemesterPromise
+  updateSemester: (args: {
+    data: SemesterUpdateInput
+    where: SemesterWhereUniqueInput
+  }) => SemesterPromise
+  updateManySemesters: (args: {
+    data: SemesterUpdateManyMutationInput
+    where?: SemesterWhereInput
+  }) => BatchPayloadPromise
+  upsertSemester: (args: {
+    where: SemesterWhereUniqueInput
+    create: SemesterCreateInput
+    update: SemesterUpdateInput
+  }) => SemesterPromise
+  deleteSemester: (where: SemesterWhereUniqueInput) => SemesterPromise
+  deleteManySemesters: (where?: SemesterWhereInput) => BatchPayloadPromise
   createUser: (data: UserCreateInput) => UserPromise
   updateUser: (args: {
     data: UserUpdateInput
@@ -88,6 +124,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  semester: (
+    where?: SemesterSubscriptionWhereInput
+  ) => SemesterSubscriptionPayloadSubscription
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription
@@ -101,21 +140,93 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type SemesterType = 'FIRST' | 'SUMMER' | 'SECOND' | 'WINTER'
+
+export type SemesterOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'averagePoint_ASC'
+  | 'averagePoint_DESC'
+  | 'totalCredit_ASC'
+  | 'totalCredit_DESC'
+  | 'isOutside_ASC'
+  | 'isOutside_DESC'
+  | 'year_ASC'
+  | 'year_DESC'
+  | 'semester_ASC'
+  | 'semester_DESC'
+
 export type UserOrderByInput =
   | 'id_ASC'
   | 'id_DESC'
+  | 'mailid_ASC'
+  | 'mailid_DESC'
   | 'name_ASC'
   | 'name_DESC'
   | 'createdAt_ASC'
   | 'createdAt_DESC'
-  | 'data_ASC'
-  | 'data_DESC'
+  | 'averagePoint_ASC'
+  | 'averagePoint_DESC'
 
 export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED'
 
+export type SemesterWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>
+}>
+
+export interface SemesterWhereInput {
+  id?: Maybe<ID_Input>
+  id_not?: Maybe<ID_Input>
+  id_in?: Maybe<ID_Input[] | ID_Input>
+  id_not_in?: Maybe<ID_Input[] | ID_Input>
+  id_lt?: Maybe<ID_Input>
+  id_lte?: Maybe<ID_Input>
+  id_gt?: Maybe<ID_Input>
+  id_gte?: Maybe<ID_Input>
+  id_contains?: Maybe<ID_Input>
+  id_not_contains?: Maybe<ID_Input>
+  id_starts_with?: Maybe<ID_Input>
+  id_not_starts_with?: Maybe<ID_Input>
+  id_ends_with?: Maybe<ID_Input>
+  id_not_ends_with?: Maybe<ID_Input>
+  averagePoint?: Maybe<Float>
+  averagePoint_not?: Maybe<Float>
+  averagePoint_in?: Maybe<Float[] | Float>
+  averagePoint_not_in?: Maybe<Float[] | Float>
+  averagePoint_lt?: Maybe<Float>
+  averagePoint_lte?: Maybe<Float>
+  averagePoint_gt?: Maybe<Float>
+  averagePoint_gte?: Maybe<Float>
+  totalCredit?: Maybe<Int>
+  totalCredit_not?: Maybe<Int>
+  totalCredit_in?: Maybe<Int[] | Int>
+  totalCredit_not_in?: Maybe<Int[] | Int>
+  totalCredit_lt?: Maybe<Int>
+  totalCredit_lte?: Maybe<Int>
+  totalCredit_gt?: Maybe<Int>
+  totalCredit_gte?: Maybe<Int>
+  isOutside?: Maybe<Boolean>
+  isOutside_not?: Maybe<Boolean>
+  year?: Maybe<Int>
+  year_not?: Maybe<Int>
+  year_in?: Maybe<Int[] | Int>
+  year_not_in?: Maybe<Int[] | Int>
+  year_lt?: Maybe<Int>
+  year_lte?: Maybe<Int>
+  year_gt?: Maybe<Int>
+  year_gte?: Maybe<Int>
+  semester?: Maybe<SemesterType>
+  semester_not?: Maybe<SemesterType>
+  semester_in?: Maybe<SemesterType[] | SemesterType>
+  semester_not_in?: Maybe<SemesterType[] | SemesterType>
+  AND?: Maybe<SemesterWhereInput[] | SemesterWhereInput>
+  OR?: Maybe<SemesterWhereInput[] | SemesterWhereInput>
+  NOT?: Maybe<SemesterWhereInput[] | SemesterWhereInput>
+}
+
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>
-  name?: Maybe<String>
+  mailid?: Maybe<String>
 }>
 
 export interface UserWhereInput {
@@ -133,6 +244,20 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>
   id_ends_with?: Maybe<ID_Input>
   id_not_ends_with?: Maybe<ID_Input>
+  mailid?: Maybe<String>
+  mailid_not?: Maybe<String>
+  mailid_in?: Maybe<String[] | String>
+  mailid_not_in?: Maybe<String[] | String>
+  mailid_lt?: Maybe<String>
+  mailid_lte?: Maybe<String>
+  mailid_gt?: Maybe<String>
+  mailid_gte?: Maybe<String>
+  mailid_contains?: Maybe<String>
+  mailid_not_contains?: Maybe<String>
+  mailid_starts_with?: Maybe<String>
+  mailid_not_starts_with?: Maybe<String>
+  mailid_ends_with?: Maybe<String>
+  mailid_not_ends_with?: Maybe<String>
   name?: Maybe<String>
   name_not?: Maybe<String>
   name_in?: Maybe<String[] | String>
@@ -155,33 +280,185 @@ export interface UserWhereInput {
   createdAt_lte?: Maybe<DateTimeInput>
   createdAt_gt?: Maybe<DateTimeInput>
   createdAt_gte?: Maybe<DateTimeInput>
-  data?: Maybe<Float>
-  data_not?: Maybe<Float>
-  data_in?: Maybe<Float[] | Float>
-  data_not_in?: Maybe<Float[] | Float>
-  data_lt?: Maybe<Float>
-  data_lte?: Maybe<Float>
-  data_gt?: Maybe<Float>
-  data_gte?: Maybe<Float>
+  averagePoint?: Maybe<Float>
+  averagePoint_not?: Maybe<Float>
+  averagePoint_in?: Maybe<Float[] | Float>
+  averagePoint_not_in?: Maybe<Float[] | Float>
+  averagePoint_lt?: Maybe<Float>
+  averagePoint_lte?: Maybe<Float>
+  averagePoint_gt?: Maybe<Float>
+  averagePoint_gte?: Maybe<Float>
+  semesters_every?: Maybe<SemesterWhereInput>
+  semesters_some?: Maybe<SemesterWhereInput>
+  semesters_none?: Maybe<SemesterWhereInput>
   AND?: Maybe<UserWhereInput[] | UserWhereInput>
   OR?: Maybe<UserWhereInput[] | UserWhereInput>
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>
 }
 
+export interface SemesterCreateInput {
+  id?: Maybe<ID_Input>
+  averagePoint: Float
+  totalCredit: Int
+  isOutside?: Maybe<Boolean>
+  year: Int
+  semester: SemesterType
+}
+
+export interface SemesterUpdateInput {
+  averagePoint?: Maybe<Float>
+  totalCredit?: Maybe<Int>
+  isOutside?: Maybe<Boolean>
+  year?: Maybe<Int>
+  semester?: Maybe<SemesterType>
+}
+
+export interface SemesterUpdateManyMutationInput {
+  averagePoint?: Maybe<Float>
+  totalCredit?: Maybe<Int>
+  isOutside?: Maybe<Boolean>
+  year?: Maybe<Int>
+  semester?: Maybe<SemesterType>
+}
+
 export interface UserCreateInput {
   id?: Maybe<ID_Input>
-  name: String
-  data?: Maybe<Float>
+  mailid: String
+  name?: Maybe<String>
+  averagePoint?: Maybe<Float>
+  semesters?: Maybe<SemesterCreateManyInput>
+}
+
+export interface SemesterCreateManyInput {
+  create?: Maybe<SemesterCreateInput[] | SemesterCreateInput>
+  connect?: Maybe<SemesterWhereUniqueInput[] | SemesterWhereUniqueInput>
 }
 
 export interface UserUpdateInput {
+  mailid?: Maybe<String>
   name?: Maybe<String>
-  data?: Maybe<Float>
+  averagePoint?: Maybe<Float>
+  semesters?: Maybe<SemesterUpdateManyInput>
+}
+
+export interface SemesterUpdateManyInput {
+  create?: Maybe<SemesterCreateInput[] | SemesterCreateInput>
+  update?: Maybe<
+    | SemesterUpdateWithWhereUniqueNestedInput[]
+    | SemesterUpdateWithWhereUniqueNestedInput
+  >
+  upsert?: Maybe<
+    | SemesterUpsertWithWhereUniqueNestedInput[]
+    | SemesterUpsertWithWhereUniqueNestedInput
+  >
+  delete?: Maybe<SemesterWhereUniqueInput[] | SemesterWhereUniqueInput>
+  connect?: Maybe<SemesterWhereUniqueInput[] | SemesterWhereUniqueInput>
+  set?: Maybe<SemesterWhereUniqueInput[] | SemesterWhereUniqueInput>
+  disconnect?: Maybe<SemesterWhereUniqueInput[] | SemesterWhereUniqueInput>
+  deleteMany?: Maybe<SemesterScalarWhereInput[] | SemesterScalarWhereInput>
+  updateMany?: Maybe<
+    | SemesterUpdateManyWithWhereNestedInput[]
+    | SemesterUpdateManyWithWhereNestedInput
+  >
+}
+
+export interface SemesterUpdateWithWhereUniqueNestedInput {
+  where: SemesterWhereUniqueInput
+  data: SemesterUpdateDataInput
+}
+
+export interface SemesterUpdateDataInput {
+  averagePoint?: Maybe<Float>
+  totalCredit?: Maybe<Int>
+  isOutside?: Maybe<Boolean>
+  year?: Maybe<Int>
+  semester?: Maybe<SemesterType>
+}
+
+export interface SemesterUpsertWithWhereUniqueNestedInput {
+  where: SemesterWhereUniqueInput
+  update: SemesterUpdateDataInput
+  create: SemesterCreateInput
+}
+
+export interface SemesterScalarWhereInput {
+  id?: Maybe<ID_Input>
+  id_not?: Maybe<ID_Input>
+  id_in?: Maybe<ID_Input[] | ID_Input>
+  id_not_in?: Maybe<ID_Input[] | ID_Input>
+  id_lt?: Maybe<ID_Input>
+  id_lte?: Maybe<ID_Input>
+  id_gt?: Maybe<ID_Input>
+  id_gte?: Maybe<ID_Input>
+  id_contains?: Maybe<ID_Input>
+  id_not_contains?: Maybe<ID_Input>
+  id_starts_with?: Maybe<ID_Input>
+  id_not_starts_with?: Maybe<ID_Input>
+  id_ends_with?: Maybe<ID_Input>
+  id_not_ends_with?: Maybe<ID_Input>
+  averagePoint?: Maybe<Float>
+  averagePoint_not?: Maybe<Float>
+  averagePoint_in?: Maybe<Float[] | Float>
+  averagePoint_not_in?: Maybe<Float[] | Float>
+  averagePoint_lt?: Maybe<Float>
+  averagePoint_lte?: Maybe<Float>
+  averagePoint_gt?: Maybe<Float>
+  averagePoint_gte?: Maybe<Float>
+  totalCredit?: Maybe<Int>
+  totalCredit_not?: Maybe<Int>
+  totalCredit_in?: Maybe<Int[] | Int>
+  totalCredit_not_in?: Maybe<Int[] | Int>
+  totalCredit_lt?: Maybe<Int>
+  totalCredit_lte?: Maybe<Int>
+  totalCredit_gt?: Maybe<Int>
+  totalCredit_gte?: Maybe<Int>
+  isOutside?: Maybe<Boolean>
+  isOutside_not?: Maybe<Boolean>
+  year?: Maybe<Int>
+  year_not?: Maybe<Int>
+  year_in?: Maybe<Int[] | Int>
+  year_not_in?: Maybe<Int[] | Int>
+  year_lt?: Maybe<Int>
+  year_lte?: Maybe<Int>
+  year_gt?: Maybe<Int>
+  year_gte?: Maybe<Int>
+  semester?: Maybe<SemesterType>
+  semester_not?: Maybe<SemesterType>
+  semester_in?: Maybe<SemesterType[] | SemesterType>
+  semester_not_in?: Maybe<SemesterType[] | SemesterType>
+  AND?: Maybe<SemesterScalarWhereInput[] | SemesterScalarWhereInput>
+  OR?: Maybe<SemesterScalarWhereInput[] | SemesterScalarWhereInput>
+  NOT?: Maybe<SemesterScalarWhereInput[] | SemesterScalarWhereInput>
+}
+
+export interface SemesterUpdateManyWithWhereNestedInput {
+  where: SemesterScalarWhereInput
+  data: SemesterUpdateManyDataInput
+}
+
+export interface SemesterUpdateManyDataInput {
+  averagePoint?: Maybe<Float>
+  totalCredit?: Maybe<Int>
+  isOutside?: Maybe<Boolean>
+  year?: Maybe<Int>
+  semester?: Maybe<SemesterType>
 }
 
 export interface UserUpdateManyMutationInput {
+  mailid?: Maybe<String>
   name?: Maybe<String>
-  data?: Maybe<Float>
+  averagePoint?: Maybe<Float>
+}
+
+export interface SemesterSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>
+  updatedFields_contains?: Maybe<String>
+  updatedFields_contains_every?: Maybe<String[] | String>
+  updatedFields_contains_some?: Maybe<String[] | String>
+  node?: Maybe<SemesterWhereInput>
+  AND?: Maybe<SemesterSubscriptionWhereInput[] | SemesterSubscriptionWhereInput>
+  OR?: Maybe<SemesterSubscriptionWhereInput[] | SemesterSubscriptionWhereInput>
+  NOT?: Maybe<SemesterSubscriptionWhereInput[] | SemesterSubscriptionWhereInput>
 }
 
 export interface UserSubscriptionWhereInput {
@@ -199,57 +476,65 @@ export interface NodeNode {
   id: ID_Output
 }
 
-export interface User {
+export interface Semester {
   id: ID_Output
-  name: String
-  createdAt: DateTimeOutput
-  data?: Float
+  averagePoint: Float
+  totalCredit: Int
+  isOutside?: Boolean
+  year: Int
+  semester: SemesterType
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface SemesterPromise extends Promise<Semester>, Fragmentable {
   id: () => Promise<ID_Output>
-  name: () => Promise<String>
-  createdAt: () => Promise<DateTimeOutput>
-  data: () => Promise<Float>
+  averagePoint: () => Promise<Float>
+  totalCredit: () => Promise<Int>
+  isOutside: () => Promise<Boolean>
+  year: () => Promise<Int>
+  semester: () => Promise<SemesterType>
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface SemesterSubscription
+  extends Promise<AsyncIterator<Semester>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>
-  name: () => Promise<AsyncIterator<String>>
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>
-  data: () => Promise<AsyncIterator<Float>>
+  averagePoint: () => Promise<AsyncIterator<Float>>
+  totalCredit: () => Promise<AsyncIterator<Int>>
+  isOutside: () => Promise<AsyncIterator<Boolean>>
+  year: () => Promise<AsyncIterator<Int>>
+  semester: () => Promise<AsyncIterator<SemesterType>>
 }
 
-export interface UserNullablePromise
-  extends Promise<User | null>,
+export interface SemesterNullablePromise
+  extends Promise<Semester | null>,
     Fragmentable {
   id: () => Promise<ID_Output>
-  name: () => Promise<String>
-  createdAt: () => Promise<DateTimeOutput>
-  data: () => Promise<Float>
+  averagePoint: () => Promise<Float>
+  totalCredit: () => Promise<Int>
+  isOutside: () => Promise<Boolean>
+  year: () => Promise<Int>
+  semester: () => Promise<SemesterType>
 }
 
-export interface UserConnection {
+export interface SemesterConnection {
   pageInfo: PageInfo
-  edges: UserEdge[]
+  edges: SemesterEdge[]
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface SemesterConnectionPromise
+  extends Promise<SemesterConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T
-  edges: <T = FragmentableArray<UserEdge>>() => T
-  aggregate: <T = AggregateUserPromise>() => T
+  edges: <T = FragmentableArray<SemesterEdge>>() => T
+  aggregate: <T = AggregateSemesterPromise>() => T
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface SemesterConnectionSubscription
+  extends Promise<AsyncIterator<SemesterConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T
-  aggregate: <T = AggregateUserSubscription>() => T
+  edges: <T = Promise<AsyncIterator<SemesterEdgeSubscription>>>() => T
+  aggregate: <T = AggregateSemesterSubscription>() => T
 }
 
 export interface PageInfo {
@@ -273,6 +558,125 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>
   startCursor: () => Promise<AsyncIterator<String>>
   endCursor: () => Promise<AsyncIterator<String>>
+}
+
+export interface SemesterEdge {
+  node: Semester
+  cursor: String
+}
+
+export interface SemesterEdgePromise
+  extends Promise<SemesterEdge>,
+    Fragmentable {
+  node: <T = SemesterPromise>() => T
+  cursor: () => Promise<String>
+}
+
+export interface SemesterEdgeSubscription
+  extends Promise<AsyncIterator<SemesterEdge>>,
+    Fragmentable {
+  node: <T = SemesterSubscription>() => T
+  cursor: () => Promise<AsyncIterator<String>>
+}
+
+export interface AggregateSemester {
+  count: Int
+}
+
+export interface AggregateSemesterPromise
+  extends Promise<AggregateSemester>,
+    Fragmentable {
+  count: () => Promise<Int>
+}
+
+export interface AggregateSemesterSubscription
+  extends Promise<AsyncIterator<AggregateSemester>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>
+}
+
+export interface User {
+  id: ID_Output
+  mailid: String
+  name?: String
+  createdAt: DateTimeOutput
+  averagePoint: Float
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>
+  mailid: () => Promise<String>
+  name: () => Promise<String>
+  createdAt: () => Promise<DateTimeOutput>
+  averagePoint: () => Promise<Float>
+  semesters: <T = FragmentableArray<Semester>>(args?: {
+    where?: SemesterWhereInput
+    orderBy?: SemesterOrderByInput
+    skip?: Int
+    after?: String
+    before?: String
+    first?: Int
+    last?: Int
+  }) => T
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>
+  mailid: () => Promise<AsyncIterator<String>>
+  name: () => Promise<AsyncIterator<String>>
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>
+  averagePoint: () => Promise<AsyncIterator<Float>>
+  semesters: <T = Promise<AsyncIterator<SemesterSubscription>>>(args?: {
+    where?: SemesterWhereInput
+    orderBy?: SemesterOrderByInput
+    skip?: Int
+    after?: String
+    before?: String
+    first?: Int
+    last?: Int
+  }) => T
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>
+  mailid: () => Promise<String>
+  name: () => Promise<String>
+  createdAt: () => Promise<DateTimeOutput>
+  averagePoint: () => Promise<Float>
+  semesters: <T = FragmentableArray<Semester>>(args?: {
+    where?: SemesterWhereInput
+    orderBy?: SemesterOrderByInput
+    skip?: Int
+    after?: String
+    before?: String
+    first?: Int
+    last?: Int
+  }) => T
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo
+  edges: UserEdge[]
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T
+  edges: <T = FragmentableArray<UserEdge>>() => T
+  aggregate: <T = AggregateUserPromise>() => T
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T
+  aggregate: <T = AggregateUserSubscription>() => T
 }
 
 export interface UserEdge {
@@ -324,6 +728,62 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>
 }
 
+export interface SemesterSubscriptionPayload {
+  mutation: MutationType
+  node: Semester
+  updatedFields: String[]
+  previousValues: SemesterPreviousValues
+}
+
+export interface SemesterSubscriptionPayloadPromise
+  extends Promise<SemesterSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>
+  node: <T = SemesterPromise>() => T
+  updatedFields: () => Promise<String[]>
+  previousValues: <T = SemesterPreviousValuesPromise>() => T
+}
+
+export interface SemesterSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SemesterSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>
+  node: <T = SemesterSubscription>() => T
+  updatedFields: () => Promise<AsyncIterator<String[]>>
+  previousValues: <T = SemesterPreviousValuesSubscription>() => T
+}
+
+export interface SemesterPreviousValues {
+  id: ID_Output
+  averagePoint: Float
+  totalCredit: Int
+  isOutside?: Boolean
+  year: Int
+  semester: SemesterType
+}
+
+export interface SemesterPreviousValuesPromise
+  extends Promise<SemesterPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>
+  averagePoint: () => Promise<Float>
+  totalCredit: () => Promise<Int>
+  isOutside: () => Promise<Boolean>
+  year: () => Promise<Int>
+  semester: () => Promise<SemesterType>
+}
+
+export interface SemesterPreviousValuesSubscription
+  extends Promise<AsyncIterator<SemesterPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>
+  averagePoint: () => Promise<AsyncIterator<Float>>
+  totalCredit: () => Promise<AsyncIterator<Int>>
+  isOutside: () => Promise<AsyncIterator<Boolean>>
+  year: () => Promise<AsyncIterator<Int>>
+  semester: () => Promise<AsyncIterator<SemesterType>>
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType
   node: User
@@ -351,27 +811,30 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output
-  name: String
+  mailid: String
+  name?: String
   createdAt: DateTimeOutput
-  data?: Float
+  averagePoint: Float
 }
 
 export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>
+  mailid: () => Promise<String>
   name: () => Promise<String>
   createdAt: () => Promise<DateTimeOutput>
-  data: () => Promise<Float>
+  averagePoint: () => Promise<Float>
 }
 
 export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>
+  mailid: () => Promise<AsyncIterator<String>>
   name: () => Promise<AsyncIterator<String>>
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>
-  data: () => Promise<AsyncIterator<Float>>
+  averagePoint: () => Promise<AsyncIterator<Float>>
 }
 
 /*
@@ -379,21 +842,6 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 */
 export type ID_Input = string | number
 export type ID_Output = string
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string
-
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string
-
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string
 
 /*
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
@@ -410,6 +858,21 @@ The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean
 
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string
+
 export type Long = string
 
 /**
@@ -419,6 +882,14 @@ export type Long = string
 export const models: Model[] = [
   {
     name: 'User',
+    embedded: false,
+  },
+  {
+    name: 'SemesterType',
+    embedded: false,
+  },
+  {
+    name: 'Semester',
     embedded: false,
   },
 ]

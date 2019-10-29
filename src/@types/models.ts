@@ -3,4 +3,4 @@ export type TypeUserNoPw = {
   student_pw: string
 }
 
-export type TypeUser = { name: string; data?: number }
+export type TypeUser = { mailid: string; data?: number }

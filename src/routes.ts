@@ -4,34 +4,36 @@ import { Request, Response } from 'express'
 
 import { sendMail } from './mail'
 import { signToken } from './jwt'
-import { isNotVaild } from './checkVaild'
+import { login } from './checkVaild'
 import { createUser, searchUser, isUserExist, appnedUserData } from './models'
+import { domain } from './varables'
 
 import { fetch } from './utils/fetch'
 import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
 
 const mode = process.env.mode!
 
-export const loginRoute = async ({ body }: TypeReq<string>, res: Response) => {
-  const to = `${body}@jejunu.ac.kr`
-
-  if (await isNotVaild(to)) return res.status(401).end()
-
+export const loginRoute = async (
+  { body: { mailid } }: TypeReq<{ mailid: string }>,
+  res: Response
+) => {
   try {
-    if (!(await isUserExist(body))) await createUser({ name: body })
-  } catch (error) {
-    res.status(500).send(error)
+    const token = login(mailid)
+
+    if (mode === 'dev') {
+      res.status(201).send(token)
+      return
+    }
+
+    await sendMail({
+      to: `${mailid}@${domain}`,
+      text: `localhost:3000/main&token=${token}`,
+    })
+
+    res.status(201).end()
+  } catch (e) {
+    typeof e === 'number' ? res.status(e) : console.error(e)
   }
-
-  const token = signToken(body)
-
-  if (mode === 'dev') {
-    res.status(201).send(token)
-    return
-  }
-
-  await sendMail({ to, text: `localhost:3000/main&token=${token}` })
-  res.status(201).end()
 }
 
 export const fetchRoute = async (
@@ -39,11 +41,11 @@ export const fetchRoute = async (
   res: TypePayloadRes
 ) => {
   const data = await fetch(body)
-  appnedUserData({ name: res.locals.name, data: parseFloat(data) })
-  res.status(201).send(data)
+  appnedUserData({ mailid: res.locals.mailid, data: parseFloat(data) })
+  res.status(201).send({ gpa: data })
 }
 
 export const GPARoute = async (req: Request, res: TypePayloadRes) => {
-  const { data } = await searchUser(res.locals.name)
+  const { data } = await searchUser(res.locals.mailid)
   data ? res.status(200).send(data.toString()) : res.status(204).end()
 }
