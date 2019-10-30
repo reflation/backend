@@ -6,6 +6,8 @@
   "scripts": {
     "start": "ts-node -- bin/www.ts",
     "start:watch": "nodemon --exec ts-node -- bin/www.ts",
+    "demo": "ts-node -- bin/demo.ts",
+    "demo:watch": "nodemon --exec ts-node -- bin/demo.ts",
     "test": "jest",
     "build": "ts-node -- src/index.ts",
     "lint": "./node_modules/.bin/eslint src/index.ts src/index.test.ts"

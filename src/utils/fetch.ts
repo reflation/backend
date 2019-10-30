@@ -1,7 +1,13 @@
 import request from 'request'
 import { base64Encode } from './base64'
+import {
+  oneDepthLiteral,
+  TwoDepthLiteralArray,
+  TypeList,
+  TypeSearch,
+} from './str2int'
 
-import { TypeUserNoPw } from '../@types/models'
+import { TypeFechParam } from '../@types/params'
 
 const BaseURL = 'https://dreamy.jejunu.ac.kr'
 const rejectUnauthorized = false
@@ -25,20 +31,37 @@ const getCookie = (id: string, pw: string) =>
     )
   })
 
-export const fetch = ({ student_no, student_pw }: TypeUserNoPw) =>
-  new Promise<string>(async (res, rej) => {
+// post-processor
+// TODO: use decorator pattern
+const postList = (data: TypeList) => ({
+  TERMNOW_DATA: TwoDepthLiteralArray(data.TERMNOW_DATA),
+  PERSON_DATA: oneDepthLiteral(data.PERSON_DATA),
+  TOP_DATA: oneDepthLiteral(data.TOP_DATA),
+})
+
+const postItem = (data: TypeSearch) => ({
+  GRID_DATA: TwoDepthLiteralArray(data.GRID_DATA),
+  BOTTOM_DATA: oneDepthLiteral(data.BOTTOM_DATA),
+  TOP_DATA: oneDepthLiteral(data.TOP_DATA),
+})
+
+export const fetcher = ({ student_no, student_pw, form }: TypeFechParam) =>
+  new Promise<object>(async (res, rej) => {
     try {
       const cookie = await getCookie(student_no.toString(), student_pw)
       request.post(
-        `${BaseURL}/hjju/hj/sta_hj_1010q.jejunu`,
+        `${BaseURL}/susj/sj/sta_sj_3230q.jejunu`,
         {
           rejectUnauthorized,
-          form: { mode: 'doValue', student_no },
+          form,
           headers: Object.assign(headers, {
             Cookie: `${cookie[0].substring(0, 19)} ${cookie[1]}`,
           }),
         },
-        (_, __, body) => res(JSON.parse(body).CREDIT_SUBJECT[0].avg_mark)
+        (_, __, body) => {
+          const data = JSON.parse(body)
+          res(form.mode === 'doSearch' ? postList(data) : postItem(data))
+        }
       )
     } catch (e) {
       console.error(e)

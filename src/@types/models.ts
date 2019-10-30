@@ -1,4 +1,4 @@
-export type TypeUserNoPw = {
+export interface TypeUserNoPw {
   student_no: number
   student_pw: string
 }
