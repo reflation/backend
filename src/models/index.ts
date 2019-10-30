@@ -1,8 +1,9 @@
-import { prisma } from './prisma'
+import { prisma, UserCreateInput, User } from './prisma'
 
 import { TypeUser } from '../@types/models'
 
-export const createUser = prisma.createUser
+export const createUser: (i: UserCreateInput) => Promise<User> =
+  prisma.createUser
 
 export const searchUser = async (mailid: string): Promise<TypeUser> => {
   const user = (await prisma.user({ mailid }).$fragment(`
@@ -20,7 +21,7 @@ export const searchUser = async (mailid: string): Promise<TypeUser> => {
 
 export const isUserExist = (mailid: string) => prisma.$exists.user({ mailid })
 
-export const appnedUserData = ({ mailid, data }: TypeUser) =>
+export const appnedUserData = ({ mailid, data }: TypeUser): Promise<User> =>
   prisma.updateUser({
     data: { averagePoint: data },
     where: { mailid },
