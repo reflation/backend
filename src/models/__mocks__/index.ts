@@ -13,6 +13,8 @@ const users: User[] = [
 ]
 
 export const createUser = async (input: UserCreateInput): Promise<User> => {
+  if (isUserExist(input.mailid))
+    throw Error('The user with same mailid already exists.')
   const user: User = {
     createdAt: new Date().toISOString(),
     ...input,
