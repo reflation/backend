@@ -8,7 +8,7 @@ import { login } from './checkVaild'
 import { createUser, searchUser, isUserExist, appnedUserData } from './models'
 import { domain } from './varables'
 
-import { fetch } from './utils/fetch'
+import { fetchAndParse } from './utils/fetch'
 import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
 
 const mode = process.env.mode!
@@ -40,8 +40,8 @@ export const fetchRoute = async (
   { body }: TypeReqAuth,
   res: TypePayloadRes
 ) => {
-  const data = await fetch(body)
-  appnedUserData({ mailid: res.locals.mailid, data: parseFloat(data) })
+  const data = await fetchAndParse(body)
+  appnedUserData({ mailid: res.locals.mailid, data })
   res.status(201).send({ gpa: data })
 }
 

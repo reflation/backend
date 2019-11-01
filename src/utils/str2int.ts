@@ -18,7 +18,8 @@ export type TypeSearch = {
   TOP_DATA: strLiteral
 }
 
-export const oneDepthLiteral = (data: strLiteral) => {
+// hack(unknown type): type safely for '../@types/dreamy.ts': type 'PostprocessedList' or 'PostprocessedItem'
+export const oneDepthLiteral = (data: strLiteral): unknown => {
   let result: strOrNumLiteral = {}
   Object.keys(data).forEach(key => {
     const value = data[key]

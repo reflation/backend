@@ -35,6 +35,8 @@ export type TypeListForm = {
   outside_seq: 0 | 1
 }
 
+export type TypeSearchOrList = TypeSearchForm | TypeListForm
+
 export interface TypeFechParam extends TypeUserNoPw {
-  form: TypeSearchForm | TypeListForm
+  form: TypeSearchOrList
 }
