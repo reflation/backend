@@ -12,6 +12,8 @@ interface TypeRes<T> extends request.Response {
 
 const invaild = 'INVAILD'
 
+jest.mock('./models/index')
+
 describe('POST /login is', () => {
   const inVaild = { body: { mailid: 'muhunkim' }, code: 401 }
   const vaild = { body: { mailid: 'muhun' }, code: 201 }
