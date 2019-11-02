@@ -7,24 +7,25 @@ const users: User[] = [
     id: 'ck2bz0s449a4v0919xqvuzht9',
     createdAt: '2019-10-29T14:53:17.524Z',
     mailid: 'muhun',
-    name: '무훈',
-    averagePoint: 4.2,
+    name: '김무훈',
+    averagePoint: 3.5,
   },
 ]
 
-export const createUser = async (input: UserCreateInput): Promise<User> => {
-  if (isUserExist(input.mailid))
-    throw Error('The user with same mailid already exists.')
-  const user: User = {
-    createdAt: new Date().toISOString(),
-    ...input,
-    averagePoint: input.averagePoint || 4.2,
-    name: input.name || undefined,
-    id: input.id ? input.id.toString() : cuid(),
-  }
-  users.push(user)
-  return user
-}
+export const createUser = (input: UserCreateInput) =>
+  new Promise<User>((res, rej) => {
+    if (isUserExist(input.mailid))
+      rej(new Error('The user with same mailid already exists.'))
+    const user: User = {
+      createdAt: new Date().toISOString(),
+      ...input,
+      averagePoint: input.averagePoint || 3.5,
+      name: input.name || undefined,
+      id: input.id ? input.id.toString() : cuid(),
+    }
+    users.push(user)
+    res(user)
+  })
 
 export const searchUser = async (mailid: string): Promise<TypeUser> => {
   const user = users.find(user => user.mailid === mailid)
@@ -35,14 +36,15 @@ export const searchUser = async (mailid: string): Promise<TypeUser> => {
   }
 }
 
-export const isUserExist = async (mailid: string) =>
-  users.some(user => user.mailid === mailid)
+export const isUserExist = (mailid: string) =>
+  Promise.resolve(users.some(user => user.mailid === mailid))
 
-export const appendUserData = async ({
-  mailid,
-  data,
-}: TypeUser): Promise<User> => {
-  const foundIndex = users.findIndex(user => user.mailid === mailid)
-  users[foundIndex].averagePoint = data || 4.2
-  return users[foundIndex]
-}
+export const appendUserData = (data: TypeUser) =>
+  new Promise<User>(res => {
+    const { mailid, ...others } = data
+    const foundIndex = users.findIndex(user => user.mailid === mailid)
+    Object.keys(others).forEach(key => {
+      user[foundIndex][key] = others[key]
+    })
+    res(users[foundIndex])
+  })

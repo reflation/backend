@@ -1,6 +1,7 @@
 import request from 'request'
 import { domain } from './varables'
 import { isUserExist, createUser } from './models'
+import { signToken } from './jwt'
 
 type TypeRes = {
   result: boolean
@@ -31,7 +32,8 @@ export const login = async (mailid: string) => {
   const mailAddress = `${mailid}@${domain}`
   if (await isNotVaild(mailAddress)) throw 401
   try {
-    if (!(await isUserExist(mailAddress))) await createUser({ mailid })
+    if (!(await isUserExist(mailid))) await createUser({ mailid })
+    return signToken(mailid)
   } catch (e) {
     throw 501
   }

@@ -3,16 +3,15 @@ import should from 'should'
 
 import app from '.'
 import { signToken } from './jwt'
+import { TypeUser } from './@types/models'
 
-interface TypeRes<T> extends request.Response {
-  body: T
+interface TypeRes extends request.Response {
+  body: TypeUser
 }
-
-// TODO: clear database before test execute
 
 const invaild = 'INVAILD'
 
-jest.mock('./models/index')
+jest.mock('./models')
 
 describe('POST /login is', () => {
   const inVaild = { body: { mailid: 'muhunkim' }, code: 401 }
@@ -45,9 +44,7 @@ describe('POST /fetch is', () => {
         .send(form)
         .set('Authorization', token)
         .expect(201)
-        .end((err, res: TypeRes<{ gpa: string }>) => {
-          const gpa = parseFloat(res.body.gpa)
-          should(gpa).be.Number()
+        .end((err, res: TypeRes) => {
           done()
         }))
   })
@@ -61,7 +58,7 @@ describe('POST /fetch is', () => {
   })
 })
 
-describe('GET /GPA', () => {
+describe('GET /load', () => {
   describe('send vaild token', () => {
     let token: string
     beforeEach(() => {
@@ -69,12 +66,10 @@ describe('GET /GPA', () => {
     })
     it('return 200 status code', done =>
       request(app)
-        .get('/GPA')
+        .get('/load')
         .set('Authorization', token)
         .expect(200)
-        .end((err, res: TypeRes<{ gpa: string }>) => {
-          const gpa = parseFloat(res.body.gpa)
-          should(gpa).be.Number()
+        .end((err, res: TypeRes) => {
           done()
         }))
   })
@@ -82,10 +77,8 @@ describe('GET /GPA', () => {
   describe('send invaild token', () => {
     it('return 401 status code', done =>
       request(app)
-        .get('/GPA')
+        .get('/load')
         .set('Authorization', 'INVAILD')
         .expect(401, done))
   })
 })
-
-// TODO(prisma): clear database when before test execute

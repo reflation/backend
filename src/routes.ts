@@ -3,9 +3,8 @@ import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 
 import { sendMail } from './mail'
-import { signToken } from './jwt'
 import { login } from './checkVaild'
-import { createUser, searchUser, isUserExist, appnedUserData } from './models'
+import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
 import { fetch } from './utils/fetch'
@@ -18,7 +17,7 @@ export const loginRoute = async (
   res: Response
 ) => {
   try {
-    const token = login(mailid)
+    const token = await login(mailid)
 
     if (mode === 'dev') {
       res.status(201).send(token)
@@ -40,12 +39,12 @@ export const fetchRoute = async (
   { body }: TypeReqAuth,
   res: TypePayloadRes
 ) => {
-  const data = await fetch(body)
-  appnedUserData({ mailid: res.locals.mailid, data: parseFloat(data) })
-  res.status(201).send({ gpa: data })
+  const data = await fetchAndParse(body)
+  appnedUserData({ mailid: res.locals.mailid, data })
+  res.status(201).send({ ...data })
 }
 
-export const GPARoute = async (req: Request, res: TypePayloadRes) => {
-  const { data } = await searchUser(res.locals.mailid)
-  data ? res.status(200).send(data.toString()) : res.status(204).end()
+export const cacheRoute = async (req: Request, res: TypePayloadRes) => {
+  const data = await searchUser(res.locals.mailid)
+  data ? res.status(200).send({ ...data }) : res.status(204).end()
 }
