@@ -21,8 +21,14 @@ export const searchUser = async (mailid: string): Promise<TypeUser> => {
 
 export const isUserExist = (mailid: string) => prisma.$exists.user({ mailid })
 
-export const appnedUserData = ({ mailid, data }: TypeUser): Promise<User> =>
+export const appnedUserData = ({
+  mailid,
+  data,
+}: {
+  mailid: string
+  data: TypeUser
+}): Promise<User> =>
   prisma.updateUser({
-    data: { averagePoint: data },
+    data,
     where: { mailid },
   })

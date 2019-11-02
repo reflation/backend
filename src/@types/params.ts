@@ -23,3 +23,20 @@ export type TypePayload = {
 export interface TypePayloadRes extends Response {
   locals: TypePayload
 }
+
+export type TypeSearchForm = {
+  mode: 'doSearch'
+}
+
+export type TypeListForm = {
+  mode: 'doList'
+  year: number
+  term_gb: 10 | 11 | 20 | 21
+  outside_seq: 0 | 1
+}
+
+export type TypeSearchOrList = TypeSearchForm | TypeListForm
+
+export interface TypeFechParam extends TypeUserNoPw {
+  form: TypeSearchOrList
+}

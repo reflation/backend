@@ -7,7 +7,7 @@ import { login } from './checkVaild'
 import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
-import { fetch } from './utils/fetch'
+import { fetchAndParse } from './utils/fetch'
 import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
 
 const mode = process.env.mode!
