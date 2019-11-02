@@ -40,8 +40,6 @@ export const appendUserData = (data: TypeUser) =>
   new Promise<User>(res => {
     const { mailid, ...others } = data
     const foundIndex = users.findIndex(user => user.mailid === mailid)
-    Object.keys(others).forEach(key => {
-      user[foundIndex][key] = others[key]
-    })
+    users[foundIndex] = Object.assign(users[foundIndex], others)
     res(users[foundIndex])
   })
