@@ -27,14 +27,11 @@ export const createUser = (input: UserCreateInput) =>
     res(user)
   })
 
-export const searchUser = async (mailid: string): Promise<TypeUser> => {
-  const user = users.find(user => user.mailid === mailid)
-  if (!user) throw Error('Cannot find the ' + mailid)
-  return {
-    mailid: user.mailid,
-    data: user.averagePoint,
-  }
-}
+export const searchUser = (mailid: string) =>
+  new Promise<User>((res, rej) => {
+    const user = users.find(user => user.mailid === mailid)
+    user ? res(user) : rej(Error('Cannot find the ' + mailid))
+  })
 
 export const isUserExist = (mailid: string) =>
   Promise.resolve(users.some(user => user.mailid === mailid))
