@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 
-import { loginRoute, fetchRoute, GPARoute } from './routes'
+import { loginRoute, fetchRoute, cacheRoute } from './routes'
 import { ensureAuth } from './jwt'
 
 const app = express()
@@ -20,6 +20,6 @@ app.post(
   fetchRoute
 )
 
-app.get('/GPA', ensureAuth, GPARoute)
+app.get('/load', ensureAuth, cacheRoute)
 
 export default app
