@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 
 import { sendMail } from './mail'
-import { login } from './checkVaild'
+import { login, LoginResult } from './checkVaild'
 import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
@@ -16,32 +16,38 @@ export const loginRoute = async (
   { body: { mailid } }: TypeReq<{ mailid: string }>,
   res: Response
 ) => {
-  try {
-    const token = await login(mailid)
+  const result = await login(mailid)
 
-    if (mode === 'dev') {
-      res.status(201).send(token)
-      return
-    }
-
-    await sendMail({
-      to: `${mailid}@${domain}`,
-      text: `localhost:3000/main&token=${token}`,
-    })
-
-    res.status(201).end()
-  } catch (e) {
-    typeof e === 'number' ? res.status(e) : console.error(e)
+  if ('error' in result) {
+    res.status(result.error).end()
+    return
   }
+
+  if (mode === 'dev') {
+    res.status(201).send(result.token)
+    return
+  }
+
+  await sendMail({
+    to: `${mailid}@${domain}`,
+    text: `localhost:3000/main&token=${result.token}`,
+  })
+
+  res.status(201).end()
 }
 
 export const fetchRoute = async (
   { body }: TypeReqAuth,
   res: TypePayloadRes
 ) => {
-  const data = await fetchAndParse(body)
-  appnedUserData({ mailid: res.locals.mailid, data })
-  res.status(201).send({ ...data })
+  try {
+    const data = await fetchAndParse(body)
+    await appnedUserData({ ...data, mailid: res.locals.mailid })
+    res.status(201).send({ ...data })
+  } catch (e) {
+    console.error(e)
+    res.status(401).end()
+  }
 }
 
 export const cacheRoute = async (req: Request, res: TypePayloadRes) => {

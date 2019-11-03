@@ -1,6 +1,8 @@
 import request from 'supertest'
 import should from 'should'
 
+import dotenv from 'dotenv'
+
 import app from '.'
 import { signToken } from './jwt'
 import { TypeUser } from './@types/models'
@@ -10,6 +12,8 @@ interface TypeRes extends request.Response {
 }
 
 const invaild = 'INVAILD'
+
+dotenv.config()
 
 jest.mock('./models')
 
@@ -41,6 +45,7 @@ describe('POST /fetch is', () => {
     it('return 201 status code', done =>
       request(app)
         .post('/fetch')
+        .type('form')
         .send(form)
         .set('Authorization', token)
         .expect(201)
@@ -52,6 +57,7 @@ describe('POST /fetch is', () => {
     it('return 401 status code', done =>
       request(app)
         .post('/fetch')
+        .type('form')
         .send(form)
         .set('Authorization', 'INVAILD')
         .expect(401, done))

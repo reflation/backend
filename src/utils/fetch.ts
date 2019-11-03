@@ -18,7 +18,12 @@ import {
   grade,
   current_searched_grade_summary,
 } from '../@types/dreamy'
-import { TypeUserNoPw, TypeUser, enumSemester } from '../@types/models'
+import {
+  TypeUserNoPw,
+  TypeUser,
+  enumSemester,
+  TypeSemester,
+} from '../@types/models'
 
 const BaseURL = 'https://dreamy.jejunu.ac.kr'
 const rejectUnauthorized = false
@@ -134,7 +139,7 @@ const fetchSemester = ({ cookie, data }: TypefetchSemesterParams) =>
 
 export const fetchAndParse = async (
   account: TypeUserNoPw
-): Promise<TypeUser> => {
+): Promise<Omit<TypeUser, 'mailid'>> => {
   const { data, cookie } = await fetchList(account)
   const {
     TOP_DATA: { avg_mark: averagePoint },
