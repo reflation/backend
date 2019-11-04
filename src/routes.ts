@@ -52,6 +52,10 @@ export const fetchRoute = async (
 }
 
 export const cacheRoute = async (req: Request, res: TypePayloadRes) => {
-  const data = await searchUser(res.locals.mailid)
-  data ? res.status(200).send({ ...data }) : res.status(204).end()
+  try {
+    const data = await searchUser(res.locals.mailid)
+    data.name ? res.status(200).send(data) : res.status(204).end()
+  } catch (e) {
+    res.status(401).end()
+  }
 }
