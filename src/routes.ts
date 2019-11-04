@@ -10,6 +10,8 @@ import { domain } from './varables'
 import { fetchAndParse } from './utils/fetch'
 import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
 
+dotenv.config()
+
 const mode = process.env.mode!
 
 export const loginRoute = async (
