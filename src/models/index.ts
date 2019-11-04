@@ -3,7 +3,6 @@ import { prisma, UserCreateInput, UserUpdateInput, User } from './prisma'
 import { TypeUser } from '../@types/models'
 
 interface TypeNotCachedUser extends TypeUser {
-  name: null
   averagePoint: 0
   semesters: []
 }
