@@ -42,8 +42,9 @@ export const fetchRoute = async (
 ) => {
   try {
     const data = await fetchAndParse(body)
-    await appnedUserData({ ...data, mailid: res.locals.mailid })
-    res.status(201).send({ ...data })
+    const result = { ...data, mailid: res.locals.mailid }
+    await appnedUserData(result)
+    res.status(201).send(result)
   } catch (e) {
     console.error(e)
     res.status(401).end()
