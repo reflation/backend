@@ -33,6 +33,10 @@ export const appendUserData = (data: TypeUser) =>
     const foundIndex = users.findIndex(user => user.mailid === mailid)
     if (foundIndex === -1)
       rej(new Error('Cannot find user with mailid: ' + mailid))
-    users[foundIndex] = { ...users[foundIndex], ...others }
+    users[foundIndex] = {
+      ...users[foundIndex],
+      ...others,
+      name: others.name || undefined,
+    }
     res(users[foundIndex])
   })
