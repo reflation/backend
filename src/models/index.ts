@@ -2,17 +2,10 @@ import { prisma, UserCreateInput, UserUpdateInput, User } from './prisma'
 
 import { TypeUser } from '../@types/models'
 
-interface TypeNotCachedUser extends TypeUser {
-  averagePoint: 0
-  semesters: []
-}
-
 export const createUser: (i: UserCreateInput) => Promise<User> =
   prisma.createUser
 
-export const searchUser = async (
-  mailid: string
-): Promise<TypeUser | TypeNotCachedUser> => {
+export const searchUser = async (mailid: string): Promise<TypeUser> => {
   const user = (await prisma.user({ mailid }).$fragment(`
   fragment TypeUser on User {
     mailid
