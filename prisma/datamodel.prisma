@@ -4,7 +4,7 @@ type User {
   name: String
   createdAt: DateTime! @createdAt
   averagePoint: Float! @default(value: 0.0)
-  semesters: [Semester!]!
+  semesters: [Semester!]
 }
 
 enum SemesterType {
