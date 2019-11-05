@@ -31,6 +31,8 @@ const headers = {
   'User-Agent':
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0',
 }
+export const SESSION_EXPIRED = 'session expired'
+export const INCORRECT_ACCOUNT = 'incorrect account'
 
 // hack: Encoding Problem?
 const semesterNumStr = {
@@ -91,12 +93,19 @@ export const listFetcher = ({ student_no, student_pw, form }: TypeFechParam) =>
               Cookie: `${cookie[0].substring(0, 19)} ${cookie[1]}`,
             }),
           },
-          (_, __, body) => {
+          (_, __, body: string) => {
+            if (body[0] === '<') {
+              // when session expire: receive alert code
+              rej(INCORRECT_ACCOUNT)
+              return
+            }
             res({ data: postList(JSON.parse(body)), cookie })
           }
         )
       } catch (e) {
-        console.error(e)
+        // Hack: "TypeError: Cannot read property '0' of undefined"
+        // This error appears when form data is invalid.
+        rej(SESSION_EXPIRED)
       }
     }
   )
@@ -119,7 +128,11 @@ export const itemFetcher = ({
             Cookie: `${cookie[0].substring(0, 19)} ${cookie[1]}`,
           }),
         },
-        (_, __, body) => {
+        (_, __, body: string) => {
+          if (body[0] === '<') {
+            rej(`${SESSION_EXPIRED}`)
+            return
+          }
           res(postItem(JSON.parse(body)))
         }
       )
@@ -137,44 +150,49 @@ const fetchSemester = ({ cookie, data }: TypefetchSemesterParams) =>
     cookie,
   })
 
-export const fetchAndParse = async (
-  account: TypeUserNoPw
-): Promise<Omit<TypeUser, 'mailid'>> => {
-  const { data, cookie } = await fetchList(account)
-  const {
-    TOP_DATA: { avg_mark: averagePoint },
-    TERMNOW_DATA,
-    PERSON_DATA: { nm: name },
-  } = data
+export const fetchAndParse = (account: TypeUserNoPw) =>
+  new Promise<Omit<TypeUser, 'mailid'>>(async (res, rej) => {
+    try {
+      const { data, cookie } = await fetchList(account)
+      const {
+        TOP_DATA: { avg_mark: averagePoint },
+        TERMNOW_DATA,
+        PERSON_DATA: { nm: name },
+      } = data
 
-  const eachSemesterRequireProps = TERMNOW_DATA.map(
-    ({ year, term_gb, outside_seq }) => ({
-      year,
-      term_gb,
-      outside_seq,
-    })
-  )
+      const eachSemesterRequireProps = TERMNOW_DATA.map(
+        ({ year, term_gb, outside_seq }) => ({
+          year,
+          term_gb,
+          outside_seq,
+        })
+      )
 
-  const fetchedSemester = await Promise.all(
-    eachSemesterRequireProps.map(data => fetchSemester({ cookie, data }))
-  )
+      const fetchedSemester = (await Promise.all(
+        eachSemesterRequireProps.map(data =>
+          fetchSemester({ cookie, data }).catch(e => rej(e))
+        )
+      )) as PostprocessedItem[]
 
-  const semesters = fetchedSemester.map(
-    ({
-      BOTTOM_DATA: {
-        avg_mark: averagePoint,
-        apply_credit: totalCredit,
-        term_gb,
-        year,
-        outside_gb,
-      },
-    }) => ({
-      averagePoint,
-      totalCredit,
-      isOutside: !!outside_gb,
-      semester: enumSemester[semesterNumStr[term_gb]],
-      year,
-    })
-  )
-  return { name, averagePoint, semesters }
-}
+      const semesters = fetchedSemester.map(
+        ({
+          BOTTOM_DATA: {
+            avg_mark: averagePoint,
+            apply_credit: totalCredit,
+            term_gb,
+            year,
+            outside_gb,
+          },
+        }) => ({
+          averagePoint,
+          totalCredit,
+          isOutside: !!outside_gb,
+          semester: enumSemester[semesterNumStr[term_gb]],
+          year,
+        })
+      )
+      res({ name, averagePoint, semesters })
+    } catch (e) {
+      rej(e)
+    }
+  })

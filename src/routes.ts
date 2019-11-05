@@ -7,7 +7,11 @@ import { login, LoginResult } from './checkVaild'
 import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
-import { fetchAndParse } from './utils/fetch'
+import {
+  fetchAndParse,
+  SESSION_EXPIRED,
+  INCORRECT_ACCOUNT,
+} from './utils/fetch'
 import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
 
 dotenv.config()
@@ -48,8 +52,11 @@ export const fetchRoute = async (
     await appnedUserData(result)
     res.status(201).send(result)
   } catch (e) {
-    console.error(e)
-    res.status(401).end()
+    if (e.message === SESSION_EXPIRED || e.message === INCORRECT_ACCOUNT) {
+      res.status(401).send(e.message)
+      return
+    }
+    res.status(500).end()
   }
 }
 
