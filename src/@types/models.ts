@@ -12,10 +12,10 @@ export type TypeSemester = {
 }
 
 export type TypeUser = {
-  name: string
+  name: string | null
   mailid: string
   averagePoint: number // Float
-  semesters: TypeSemester[]
+  semesters: TypeSemester[] | null
 }
 
 export enum enumSemester {
