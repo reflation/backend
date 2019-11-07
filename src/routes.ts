@@ -34,9 +34,11 @@ export const loginRoute = async (
     return
   }
 
+  const route = result.isNull ? 'fetch' : 'main'
+
   await sendMail({
     to: `${mailid}@${domain}`,
-    text: `localhost:3000/main&token=${result.token}`,
+    text: `localhost:3000/${route}?token=${result.token}`,
   })
 
   res.status(201).end()
