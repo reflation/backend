@@ -49,8 +49,10 @@ describe('POST /fetch is', () => {
         .type('form')
         .send(formInVaild)
         .set('Authorization', token)
+        // hack: If `done` is passed as the second argument (callback function),
+        // 500 code is returned
         .expect(201)
-        .end((err, res: TypeRes) => {
+        .end((err, res) => {
           done()
         }))
 
@@ -61,7 +63,7 @@ describe('POST /fetch is', () => {
         .send(form)
         .set('Authorization', token)
         .expect(201)
-        .end((err, res: TypeRes) => {
+        .end((err, res) => {
           done()
         }))
   })

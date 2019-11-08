@@ -50,9 +50,8 @@ export const fetchRoute = async (
 ) => {
   try {
     const data = await fetchAndParse(body)
-    const result = { ...data, mailid: res.locals.mailid }
-    await appnedUserData(result)
-    res.status(201).send(result)
+    await appnedUserData({ ...data, mailid: res.locals.mailid })
+    res.status(201).end()
   } catch (e) {
     if (e.message === SESSION_EXPIRED || e.message === INCORRECT_ACCOUNT) {
       res.status(401).send(e.message)
