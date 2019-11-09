@@ -49,12 +49,7 @@ describe('POST /fetch is', () => {
         .type('form')
         .send(formInVaild)
         .set('Authorization', token)
-        // hack: If `done` is passed as the second argument (callback function),
-        // 500 code is returned
-        .expect(201)
-        .end((err, res) => {
-          done()
-        }))
+        .expect(401, done))
 
     it('return 201 status code with vaild form', done =>
       request(app)
@@ -62,10 +57,7 @@ describe('POST /fetch is', () => {
         .type('form')
         .send(form)
         .set('Authorization', token)
-        .expect(201)
-        .end((err, res) => {
-          done()
-        }))
+        .expect(201, done))
   })
   describe('send invaild token', () => {
     it('return 401 status code', done =>
