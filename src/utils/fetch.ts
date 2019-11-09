@@ -31,8 +31,12 @@ const headers = {
   'User-Agent':
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0',
 }
-export const SESSION_EXPIRED = 'session expired'
-export const INCORRECT_ACCOUNT = 'incorrect account'
+
+const SESSION_EXPIRED = 'session expired'
+const INVAILD_ACCOUNT = 'invaild account'
+
+export const isFetch401 = (str: string) =>
+  [SESSION_EXPIRED, INVAILD_ACCOUNT].findIndex(item => item === str) !== -1
 
 // hack: Encoding Problem?
 const semesterNumStr = {
@@ -45,21 +49,36 @@ const semesterNumStr = {
 }
 
 type TypefetchSemesterParams = {
-  cookie: string[]
+  cookie: string
   data: Omit<TypeListForm, 'mode'>
 }
 
-const getCookie = (id: string, pw: string) =>
-  new Promise<string[]>((res, rej) => {
+const getCookie = ({ student_no, student_pw }: TypeUserNoPw) =>
+  new Promise<string>((res, rej) => {
     request.post(
       `${BaseURL}/frame/sysUser.do?next=`,
       {
         rejectUnauthorized,
-        form: { tmpu: base64Encode(id), tmpw: base64Encode(pw) },
+        form: {
+          tmpu: base64Encode(student_no.toString()),
+          tmpw: base64Encode(student_pw),
+        },
         headers,
       },
       (err, { headers }, body: string) => {
-        res(headers['set-cookie'])
+        if (typeof body === 'string' && body.includes('dbError')) {
+          rej({
+            type: INVAILD_ACCOUNT,
+            message: (body.match(
+              /var dbError = "(?:\.|(\\\")|[^\""\n])*"/
+            ) as RegExpMatchArray)[0].slice(15, -1),
+          })
+          return
+        }
+        const cookie = headers['set-cookie']!
+        cookie
+          ? res(`${cookie[0].substring(0, 19)} ${cookie[1]}`)
+          : rej({ type: SESSION_EXPIRED })
       }
     )
   })
@@ -79,66 +98,47 @@ const postItem = (data: TypeSearch): PostprocessedItem => ({
   ) as current_searched_grade_summary,
 })
 
-export const listFetcher = ({ student_no, student_pw, form }: TypeFechParam) =>
-  new Promise<{ data: PostprocessedList; cookie: string[] }>(
-    async (res, rej) => {
-      try {
-        const cookie = await getCookie(student_no.toString(), student_pw)
-        request.post(
-          `${BaseURL}/susj/sj/sta_sj_3230q.jejunu`,
-          {
-            rejectUnauthorized,
-            form,
-            headers: Object.assign(headers, {
-              Cookie: `${cookie[0].substring(0, 19)} ${cookie[1]}`,
-            }),
-          },
-          (_, __, body: string) => {
-            if (body[0] === '<') {
-              // when session expire: receive alert code
-              rej(INCORRECT_ACCOUNT)
-              return
-            }
-            res({ data: postList(JSON.parse(body)), cookie })
-          }
-        )
-      } catch (e) {
-        // Hack: "TypeError: Cannot read property '0' of undefined"
-        // This error appears when form data is invalid.
-        rej(SESSION_EXPIRED)
+export const listFetcher = ({ form, ...account }: TypeFechParam) =>
+  new Promise<{ data: PostprocessedList; cookie: string }>(async (res, rej) => {
+    const cookie = await getCookie(account)
+    request.post(
+      `${BaseURL}/susj/sj/sta_sj_3230q.jejunu`,
+      {
+        rejectUnauthorized,
+        form,
+        headers: Object.assign(headers, { Cookie: cookie }),
+      },
+      (_, __, body: string) => {
+        body[0] === '<'
+          ? rej({ type: SESSION_EXPIRED })
+          : res({ data: postList(JSON.parse(body)), cookie })
       }
-    }
-  )
+    )
+  })
 
 export const itemFetcher = ({
   form,
   cookie,
 }: {
   form: TypeListForm
-  cookie: string[]
+  cookie: string
 }) =>
   new Promise<PostprocessedItem>(async (res, rej) => {
-    try {
-      request.post(
-        `${BaseURL}/susj/sj/sta_sj_3220q.jejunu`,
-        {
-          rejectUnauthorized,
-          form,
-          headers: Object.assign(headers, {
-            Cookie: `${cookie[0].substring(0, 19)} ${cookie[1]}`,
-          }),
-        },
-        (_, __, body: string) => {
-          if (body[0] === '<') {
-            rej(`${SESSION_EXPIRED}`)
-            return
-          }
-          res(postItem(JSON.parse(body)))
-        }
-      )
-    } catch (e) {
-      console.error(e)
-    }
+    request.post(
+      `${BaseURL}/susj/sj/sta_sj_3220q.jejunu`,
+      {
+        rejectUnauthorized,
+        form,
+        headers: Object.assign(headers, {
+          Cookie: cookie,
+        }),
+      },
+      (_, __, body: string) => {
+        body[0] === '<'
+          ? rej({ type: SESSION_EXPIRED })
+          : res(postItem(JSON.parse(body)))
+      }
+    )
   })
 
 const fetchList = (data: TypeUserNoPw) =>
@@ -150,49 +150,42 @@ const fetchSemester = ({ cookie, data }: TypefetchSemesterParams) =>
     cookie,
   })
 
-export const fetchAndParse = (account: TypeUserNoPw) =>
-  new Promise<Omit<TypeUser, 'mailid'>>(async (res, rej) => {
-    try {
-      const { data, cookie } = await fetchList(account)
-      const {
-        TOP_DATA: { avg_mark: averagePoint },
-        TERMNOW_DATA,
-        PERSON_DATA: { nm: name },
-      } = data
+export const fetchAndParse = async (account: TypeUserNoPw) => {
+  const { data, cookie } = await fetchList(account)
+  const {
+    TOP_DATA: { avg_mark: averagePoint },
+    TERMNOW_DATA,
+    PERSON_DATA: { nm: name },
+  } = data
 
-      const eachSemesterRequireProps = TERMNOW_DATA.map(
-        ({ year, term_gb, outside_seq }) => ({
-          year,
-          term_gb,
-          outside_seq,
-        })
-      )
+  const eachSemesterRequireProps = TERMNOW_DATA.map(
+    ({ year, term_gb, outside_seq }) => ({
+      year,
+      term_gb,
+      outside_seq,
+    })
+  )
 
-      const fetchedSemester = (await Promise.all(
-        eachSemesterRequireProps.map(data =>
-          fetchSemester({ cookie, data }).catch(e => rej(e))
-        )
-      )) as PostprocessedItem[]
+  const fetchedSemester = await Promise.all(
+    eachSemesterRequireProps.map(data => fetchSemester({ cookie, data }))
+  )
 
-      const semesters = fetchedSemester.map(
-        ({
-          BOTTOM_DATA: {
-            avg_mark: averagePoint,
-            apply_credit: totalCredit,
-            term_gb,
-            year,
-            outside_gb,
-          },
-        }) => ({
-          averagePoint,
-          totalCredit,
-          isOutside: !!outside_gb,
-          semester: enumSemester[semesterNumStr[term_gb]],
-          year,
-        })
-      )
-      res({ name, averagePoint, semesters })
-    } catch (e) {
-      rej(e)
-    }
-  })
+  const semesters = fetchedSemester.map(
+    ({
+      BOTTOM_DATA: {
+        avg_mark: averagePoint,
+        apply_credit: totalCredit,
+        term_gb,
+        year,
+        outside_gb,
+      },
+    }) => ({
+      averagePoint,
+      totalCredit,
+      isOutside: !!outside_gb,
+      semester: enumSemester[semesterNumStr[term_gb]],
+      year,
+    })
+  )
+  return { name, averagePoint, semesters }
+}

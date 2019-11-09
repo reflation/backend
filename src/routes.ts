@@ -7,11 +7,7 @@ import { login, LoginResult } from './checkVaild'
 import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
-import {
-  fetchAndParse,
-  SESSION_EXPIRED,
-  INCORRECT_ACCOUNT,
-} from './utils/fetch'
+import { fetchAndParse, isFetch401 } from './utils/fetch'
 import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
 
 dotenv.config()
@@ -44,21 +40,21 @@ export const loginRoute = async (
   res.status(201).end()
 }
 
+type fetchError = { type: string; message: string }
+
 export const fetchRoute = async (
   { body }: TypeReqAuth,
   res: TypePayloadRes
 ) => {
   try {
     const data = await fetchAndParse(body)
-    const result = { ...data, mailid: res.locals.mailid }
-    await appnedUserData(result)
-    res.status(201).send(result)
+    await appnedUserData({ ...data, mailid: res.locals.mailid })
+    res.status(201).end()
   } catch (e) {
-    if (e.message === SESSION_EXPIRED || e.message === INCORRECT_ACCOUNT) {
-      res.status(401).send(e.message)
-      return
-    }
-    res.status(500).end()
+    const { type, message }: fetchError = e
+    isFetch401(type)
+      ? res.status(401).send({ type, message })
+      : res.status(500).end()
   }
 }
 
