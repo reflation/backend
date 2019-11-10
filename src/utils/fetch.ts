@@ -33,10 +33,10 @@ const headers = {
 }
 
 const SESSION_EXPIRED = 'session expired'
-const INVAILD_ACCOUNT = 'invaild account'
+const INVALID_ACCOUNT = 'invalid account'
 
 export const isFetch401 = (str: string) =>
-  [SESSION_EXPIRED, INVAILD_ACCOUNT].findIndex(item => item === str) !== -1
+  [SESSION_EXPIRED, INVALID_ACCOUNT].findIndex(item => item === str) !== -1
 
 // hack: Encoding Problem?
 const semesterNumStr = {
@@ -68,7 +68,7 @@ const getCookie = ({ student_no, student_pw }: TypeUserNoPw) =>
       (err, { headers }, body: string) => {
         if (typeof body === 'string' && body.includes('dbError')) {
           rej({
-            type: INVAILD_ACCOUNT,
+            type: INVALID_ACCOUNT,
             message: (body.match(
               /var dbError = "(?:\.|(\\\")|[^\""\n])*"/
             ) as RegExpMatchArray)[0].slice(15, -1),
