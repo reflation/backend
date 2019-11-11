@@ -43,6 +43,6 @@ export const login = async (mailid: string): Promise<LoginResult> => {
       isNull: !(await searchUser(mailid)).name,
     }
   } catch (e) {
-    return { error: 501 }
+    return { error: 500 }
   }
 }
