@@ -46,7 +46,6 @@ describe('POST /fetch is', () => {
     it('return 401 status code with invaild form', done =>
       request(app)
         .post('/fetch')
-        .type('form')
         .send(formInVaild)
         .set('Authorization', token)
         .expect(401, done))
@@ -64,7 +63,6 @@ describe('POST /fetch is', () => {
     it('return 401 status code', done =>
       request(app)
         .post('/fetch')
-        .type('form')
         .send(form)
         .set('Authorization', 'INVAILD')
         .expect(401, done))

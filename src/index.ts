@@ -14,12 +14,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.post('/login', bodyParser.json(), loginRoute)
 
-app.post(
-  '/fetch',
-  bodyParser.urlencoded({ extended: false }),
-  ensureAuth,
-  fetchRoute
-)
+app.post('/fetch', bodyParser.json(), ensureAuth, fetchRoute)
 
 app.get('/load', ensureAuth, cacheRoute)
 
