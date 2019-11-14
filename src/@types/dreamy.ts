@@ -35,7 +35,7 @@ type tUnivs =
   | '예술대자인대학'
   | '미래융합대학'
 
-export interface grade {
+export interface gradeSet {
   credit: 0 | 2 | 3 | 4
   dg_gb:
     | 'A+'

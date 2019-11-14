@@ -15,7 +15,7 @@ import {
   listItem,
   personalInfo,
   parent_grade_props,
-  grade,
+  gradeSet,
   current_searched_grade_summary,
 } from '../@types/dreamy'
 import {
@@ -92,7 +92,7 @@ const postList = (data: TypeList): PostprocessedList => ({
 })
 
 const postItem = (data: TypeSearch): PostprocessedItem => ({
-  GRID_DATA: TwoDepthLiteralArray(data.GRID_DATA) as grade[],
+  GRID_DATA: TwoDepthLiteralArray(data.GRID_DATA) as gradeSet[],
   BOTTOM_DATA: oneDepthLiteral(
     data.BOTTOM_DATA
   ) as current_searched_grade_summary,
