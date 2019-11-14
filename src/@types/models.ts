@@ -1,9 +1,9 @@
-export interface TypeUserNoPw {
+export interface UserNoPw {
   student_no: number
   student_pw: string
 }
 
-export type TypeSemester = {
+export type Semester = {
   averagePoint: number // Float
   totalCredit: number
   isOutside: boolean
@@ -11,14 +11,14 @@ export type TypeSemester = {
   year: number
 }
 
-export type TypeUser = {
+export type User = {
   name: string | null
   mailid: string
   averagePoint: number // Float
-  semesters: TypeSemester[] | null
+  semesters: Semester[] | null
 }
 
-export enum enumSemester {
+export enum EnumSemester {
   '1학기' = 'FIRST',
   '하기계절' = 'SUMMER',
   '2학기' = 'SECOND',

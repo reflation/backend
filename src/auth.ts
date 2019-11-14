@@ -1,6 +1,6 @@
 import request from 'request'
 
-type TypeRes = {
+type Res = {
   result: boolean
   isUserExist?: 'Y'
 }
@@ -19,7 +19,7 @@ export const isNotVaild = (emailId: string) =>
         // jsonReviver: (body: string) => JSON.parse(body),
       },
       (err, req, body: string) => {
-        const { result }: TypeRes = JSON.parse(body)
+        const { result }: Res = JSON.parse(body)
         res(result)
       }
     )
