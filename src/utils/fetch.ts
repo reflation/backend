@@ -172,6 +172,7 @@ export const fetchAndParse = async (account: TypeUserNoPw) => {
 
   const semesters = fetchedSemester.map(
     ({
+      GRID_DATA,
       BOTTOM_DATA: {
         avg_mark: averagePoint,
         apply_credit: totalCredit,
@@ -179,13 +180,24 @@ export const fetchAndParse = async (account: TypeUserNoPw) => {
         year,
         outside_gb,
       },
-    }) => ({
-      averagePoint,
-      totalCredit,
-      isOutside: !!outside_gb,
-      semester: enumSemester[semesterNumStr[term_gb]],
-      year,
-    })
+    }) => {
+      const subject = GRID_DATA.map(
+        ({
+          subject_nm: title,
+          subject_cd: code,
+          dg_gb: grade,
+          isu_nm: type,
+        }) => ({ title, code, grade, type })
+      )
+      return {
+        subject,
+        averagePoint,
+        totalCredit,
+        isOutside: !!outside_gb,
+        semester: enumSemester[semesterNumStr[term_gb]],
+        year,
+      }
+    }
   )
   return { name, averagePoint, semesters }
 }

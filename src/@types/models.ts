@@ -1,9 +1,19 @@
+import { gradePoint, course } from './dreamy'
+
 export interface TypeUserNoPw {
   student_no: number
   student_pw: string
 }
 
+type Subject = {
+  title: string
+  code: string
+  grade: gradePoint
+  type: course
+}
+
 export type TypeSemester = {
+  subject: Subject[]
   averagePoint: number // Float
   totalCredit: number
   isOutside: boolean
