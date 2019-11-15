@@ -1,42 +1,42 @@
 import { Request, Response } from 'express'
 import { Dictionary } from 'lodash'
-import { TypeUserNoPw } from './models'
+import { UserNoPw } from './models'
 
-export interface TypeReqAuth extends Request<Dictionary<string>> {
-  body: TypeUserNoPw
+export interface ReqAuth extends Request<Dictionary<string>> {
+  body: UserNoPw
 }
 
-export interface TypeReq<T> extends Request {
+export interface Req<T> extends Request {
   body: T
 }
 
-export interface TypeRes<T> extends Response {
+export interface Res<T> extends Response {
   body: T
 }
 
-export type TypePayload = {
+export type Payload = {
   mailid: string
   iat: number
   exp: number
 }
 
-export interface TypePayloadRes extends Response {
-  locals: TypePayload
+export interface ResPayload extends Response {
+  locals: Payload
 }
 
-export type TypeSearchForm = {
+export type SearchForm = {
   mode: 'doSearch'
 }
 
-export type TypeListForm = {
+export type ListForm = {
   mode: 'doList'
   year: number
   term_gb: 10 | 11 | 20 | 21
   outside_seq: 0 | 1
 }
 
-export type TypeSearchOrList = TypeSearchForm | TypeListForm
+export type SearchOrList = SearchForm | ListForm
 
-export interface TypeFechParam extends TypeUserNoPw {
-  form: TypeSearchOrList
+export interface FechParam extends UserNoPw {
+  form: SearchOrList
 }

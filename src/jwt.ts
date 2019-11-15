@@ -6,10 +6,10 @@ import crypto from 'crypto'
 
 import { base64EncodeReplace } from './utils/base64'
 
-import { TypePayloadRes, TypePayload } from './@types/params'
+import { ResPayload, Payload } from './@types/params'
 import { RequestHandler } from 'express-serve-static-core'
 import { Dictionary } from 'lodash'
-import { TypeUser } from './@types/models'
+import { User } from './@types/models'
 
 dotenv.config()
 const secret = process.env.secret!
@@ -35,7 +35,7 @@ const verify = (token: string) =>
 
 export const ensureAuth = (
   req: Request,
-  res: TypePayloadRes,
+  res: ResPayload,
   next: NextFunction
 ) => {
   const { authorization } = req.headers
@@ -45,7 +45,7 @@ export const ensureAuth = (
   }
 
   try {
-    res.locals = verify(authorization) as TypePayload
+    res.locals = verify(authorization) as Payload
   } catch (e) {
     res.status(401)
     throw e

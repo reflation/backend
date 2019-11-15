@@ -16,9 +16,18 @@ enum SemesterType {
 
 type Semester {
   id: ID! @id
+  subjects: [Subject!]
   averagePoint: Float!
   totalCredit: Int!
   isOutside: Boolean @default(value: false)
   year: Int!
   semester: SemesterType!
+}
+
+type Subject {
+  id: ID! @id
+  title: String!
+  code: String!
+  grade: String!
+  course: String!
 }

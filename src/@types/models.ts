@@ -1,6 +1,6 @@
-import { gradePoint, course } from './dreamy'
+import { GradePoint, Course } from './dreamy'
 
-export interface TypeUserNoPw {
+export interface UserNoPw {
   student_no: number
   student_pw: string
 }
@@ -8,11 +8,11 @@ export interface TypeUserNoPw {
 type Subject = {
   title: string
   code: string
-  grade: gradePoint
-  type: course
+  grade: GradePoint
+  type: Course
 }
 
-export type TypeSemester = {
+export type Semester = {
   subject: Subject[]
   averagePoint: number // Float
   totalCredit: number
@@ -21,14 +21,14 @@ export type TypeSemester = {
   year: number
 }
 
-export type TypeUser = {
+export type User = {
   name: string | null
   mailid: string
   averagePoint: number // Float
-  semesters: TypeSemester[] | null
+  semesters: Semester[] | null
 }
 
-export enum enumSemester {
+export enum EnumSemester {
   '1학기' = 'FIRST',
   '하기계절' = 'SUMMER',
   '2학기' = 'SECOND',

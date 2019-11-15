@@ -5,10 +5,10 @@ import dotenv from 'dotenv'
 
 import app from '.'
 import { signToken } from './jwt'
-import { TypeUser } from './@types/models'
+import { User } from './@types/models'
 
 interface TypeRes extends request.Response {
-  body: TypeUser
+  body: User
 }
 
 const invaild = 'INVAILD'

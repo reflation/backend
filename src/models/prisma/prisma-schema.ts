@@ -6,6 +6,10 @@ export const typeDefs = /* GraphQL */ `type AggregateSemester {
   count: Int!
 }
 
+type AggregateSubject {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -25,6 +29,12 @@ type Mutation {
   upsertSemester(where: SemesterWhereUniqueInput!, create: SemesterCreateInput!, update: SemesterUpdateInput!): Semester!
   deleteSemester(where: SemesterWhereUniqueInput!): Semester
   deleteManySemesters(where: SemesterWhereInput): BatchPayload!
+  createSubject(data: SubjectCreateInput!): Subject!
+  updateSubject(data: SubjectUpdateInput!, where: SubjectWhereUniqueInput!): Subject
+  updateManySubjects(data: SubjectUpdateManyMutationInput!, where: SubjectWhereInput): BatchPayload!
+  upsertSubject(where: SubjectWhereUniqueInput!, create: SubjectCreateInput!, update: SubjectUpdateInput!): Subject!
+  deleteSubject(where: SubjectWhereUniqueInput!): Subject
+  deleteManySubjects(where: SubjectWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -54,6 +64,9 @@ type Query {
   semester(where: SemesterWhereUniqueInput!): Semester
   semesters(where: SemesterWhereInput, orderBy: SemesterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Semester]!
   semestersConnection(where: SemesterWhereInput, orderBy: SemesterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SemesterConnection!
+  subject(where: SubjectWhereUniqueInput!): Subject
+  subjects(where: SubjectWhereInput, orderBy: SubjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subject]!
+  subjectsConnection(where: SubjectWhereInput, orderBy: SubjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SubjectConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -62,6 +75,7 @@ type Query {
 
 type Semester {
   id: ID!
+  subjects(where: SubjectWhereInput, orderBy: SubjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subject!]
   averagePoint: Float!
   totalCredit: Int!
   isOutside: Boolean
@@ -77,6 +91,7 @@ type SemesterConnection {
 
 input SemesterCreateInput {
   id: ID
+  subjects: SubjectCreateManyInput
   averagePoint: Float!
   totalCredit: Int!
   isOutside: Boolean
@@ -194,6 +209,7 @@ enum SemesterType {
 }
 
 input SemesterUpdateDataInput {
+  subjects: SubjectUpdateManyInput
   averagePoint: Float
   totalCredit: Int
   isOutside: Boolean
@@ -202,6 +218,7 @@ input SemesterUpdateDataInput {
 }
 
 input SemesterUpdateInput {
+  subjects: SubjectUpdateManyInput
   averagePoint: Float
   totalCredit: Int
   isOutside: Boolean
@@ -268,6 +285,9 @@ input SemesterWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  subjects_every: SubjectWhereInput
+  subjects_some: SubjectWhereInput
+  subjects_none: SubjectWhereInput
   averagePoint: Float
   averagePoint_not: Float
   averagePoint_in: [Float!]
@@ -307,8 +327,292 @@ input SemesterWhereUniqueInput {
   id: ID
 }
 
+type Subject {
+  id: ID!
+  title: String!
+  code: String!
+  grade: String!
+  course: String!
+}
+
+type SubjectConnection {
+  pageInfo: PageInfo!
+  edges: [SubjectEdge]!
+  aggregate: AggregateSubject!
+}
+
+input SubjectCreateInput {
+  id: ID
+  title: String!
+  code: String!
+  grade: String!
+  course: String!
+}
+
+input SubjectCreateManyInput {
+  create: [SubjectCreateInput!]
+  connect: [SubjectWhereUniqueInput!]
+}
+
+type SubjectEdge {
+  node: Subject!
+  cursor: String!
+}
+
+enum SubjectOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  code_ASC
+  code_DESC
+  grade_ASC
+  grade_DESC
+  course_ASC
+  course_DESC
+}
+
+type SubjectPreviousValues {
+  id: ID!
+  title: String!
+  code: String!
+  grade: String!
+  course: String!
+}
+
+input SubjectScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  code: String
+  code_not: String
+  code_in: [String!]
+  code_not_in: [String!]
+  code_lt: String
+  code_lte: String
+  code_gt: String
+  code_gte: String
+  code_contains: String
+  code_not_contains: String
+  code_starts_with: String
+  code_not_starts_with: String
+  code_ends_with: String
+  code_not_ends_with: String
+  grade: String
+  grade_not: String
+  grade_in: [String!]
+  grade_not_in: [String!]
+  grade_lt: String
+  grade_lte: String
+  grade_gt: String
+  grade_gte: String
+  grade_contains: String
+  grade_not_contains: String
+  grade_starts_with: String
+  grade_not_starts_with: String
+  grade_ends_with: String
+  grade_not_ends_with: String
+  course: String
+  course_not: String
+  course_in: [String!]
+  course_not_in: [String!]
+  course_lt: String
+  course_lte: String
+  course_gt: String
+  course_gte: String
+  course_contains: String
+  course_not_contains: String
+  course_starts_with: String
+  course_not_starts_with: String
+  course_ends_with: String
+  course_not_ends_with: String
+  AND: [SubjectScalarWhereInput!]
+  OR: [SubjectScalarWhereInput!]
+  NOT: [SubjectScalarWhereInput!]
+}
+
+type SubjectSubscriptionPayload {
+  mutation: MutationType!
+  node: Subject
+  updatedFields: [String!]
+  previousValues: SubjectPreviousValues
+}
+
+input SubjectSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SubjectWhereInput
+  AND: [SubjectSubscriptionWhereInput!]
+  OR: [SubjectSubscriptionWhereInput!]
+  NOT: [SubjectSubscriptionWhereInput!]
+}
+
+input SubjectUpdateDataInput {
+  title: String
+  code: String
+  grade: String
+  course: String
+}
+
+input SubjectUpdateInput {
+  title: String
+  code: String
+  grade: String
+  course: String
+}
+
+input SubjectUpdateManyDataInput {
+  title: String
+  code: String
+  grade: String
+  course: String
+}
+
+input SubjectUpdateManyInput {
+  create: [SubjectCreateInput!]
+  update: [SubjectUpdateWithWhereUniqueNestedInput!]
+  upsert: [SubjectUpsertWithWhereUniqueNestedInput!]
+  delete: [SubjectWhereUniqueInput!]
+  connect: [SubjectWhereUniqueInput!]
+  set: [SubjectWhereUniqueInput!]
+  disconnect: [SubjectWhereUniqueInput!]
+  deleteMany: [SubjectScalarWhereInput!]
+  updateMany: [SubjectUpdateManyWithWhereNestedInput!]
+}
+
+input SubjectUpdateManyMutationInput {
+  title: String
+  code: String
+  grade: String
+  course: String
+}
+
+input SubjectUpdateManyWithWhereNestedInput {
+  where: SubjectScalarWhereInput!
+  data: SubjectUpdateManyDataInput!
+}
+
+input SubjectUpdateWithWhereUniqueNestedInput {
+  where: SubjectWhereUniqueInput!
+  data: SubjectUpdateDataInput!
+}
+
+input SubjectUpsertWithWhereUniqueNestedInput {
+  where: SubjectWhereUniqueInput!
+  update: SubjectUpdateDataInput!
+  create: SubjectCreateInput!
+}
+
+input SubjectWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  code: String
+  code_not: String
+  code_in: [String!]
+  code_not_in: [String!]
+  code_lt: String
+  code_lte: String
+  code_gt: String
+  code_gte: String
+  code_contains: String
+  code_not_contains: String
+  code_starts_with: String
+  code_not_starts_with: String
+  code_ends_with: String
+  code_not_ends_with: String
+  grade: String
+  grade_not: String
+  grade_in: [String!]
+  grade_not_in: [String!]
+  grade_lt: String
+  grade_lte: String
+  grade_gt: String
+  grade_gte: String
+  grade_contains: String
+  grade_not_contains: String
+  grade_starts_with: String
+  grade_not_starts_with: String
+  grade_ends_with: String
+  grade_not_ends_with: String
+  course: String
+  course_not: String
+  course_in: [String!]
+  course_not_in: [String!]
+  course_lt: String
+  course_lte: String
+  course_gt: String
+  course_gte: String
+  course_contains: String
+  course_not_contains: String
+  course_starts_with: String
+  course_not_starts_with: String
+  course_ends_with: String
+  course_not_ends_with: String
+  AND: [SubjectWhereInput!]
+  OR: [SubjectWhereInput!]
+  NOT: [SubjectWhereInput!]
+}
+
+input SubjectWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   semester(where: SemesterSubscriptionWhereInput): SemesterSubscriptionPayload
+  subject(where: SubjectSubscriptionWhereInput): SubjectSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
