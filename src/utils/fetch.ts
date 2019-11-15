@@ -10,7 +10,7 @@ import {
   ListItem,
   PersonalInfo,
   ParentGradeProps,
-  Grade,
+  GradeSet,
   CurrentSearchedGradeSummary,
 } from '../@types/dreamy'
 import { UserNoPw, User, EnumSemester, Semester } from '../@types/models'
@@ -82,7 +82,7 @@ const postList = (data: List): PostprocessedList => ({
 })
 
 const postItem = (data: Search): PostprocessedItem => ({
-  GRID_DATA: twoDepthLiteralArray(data.GRID_DATA) as Grade[],
+  GRID_DATA: twoDepthLiteralArray(data.GRID_DATA) as GradeSet[],
   BOTTOM_DATA: oneDepthLiteral(data.BOTTOM_DATA) as CurrentSearchedGradeSummary,
 })
 
@@ -141,6 +141,7 @@ const fetchSemester = ({ cookie, data }: FetchSemesterParams) =>
 const postSemester = (semesters: PostprocessedItem[]) =>
   semesters.map(
     ({
+      GRID_DATA,
       BOTTOM_DATA: {
         avg_mark: averagePoint,
         apply_credit: totalCredit,
@@ -148,13 +149,24 @@ const postSemester = (semesters: PostprocessedItem[]) =>
         year,
         outside_gb,
       },
-    }) => ({
-      averagePoint,
-      totalCredit,
-      isOutside: !!outside_gb,
-      semester: EnumSemester[semesterNumStr[term_gb]],
-      year,
-    })
+    }) => {
+      const subject = GRID_DATA.map(
+        ({
+          subject_nm: title,
+          subject_cd: code,
+          dg_gb: grade,
+          isu_nm: type,
+        }) => ({ title, code, grade, type })
+      )
+      return {
+        subject,
+        averagePoint,
+        totalCredit,
+        isOutside: !!outside_gb,
+        semester: EnumSemester[semesterNumStr[term_gb]],
+        year,
+      }
+    }
   )
 
 const postListItem = (list: ListItem[]) =>

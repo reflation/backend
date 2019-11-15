@@ -19,6 +19,45 @@ type Point =
   | 0.7
   | 0.0
 
+export type GradePoint =
+  | 'A+'
+  | 'A0'
+  | 'A-'
+  | 'B+'
+  | 'B0'
+  | 'B-'
+  | 'C+'
+  | 'C0'
+  | 'C-'
+  | 'D+'
+  | 'D0'
+  | 'D-'
+  | 'F'
+
+export enum GradeNum {
+  'A+' = 4.3,
+  'A0' = 4.0,
+  'A-' = 3.7,
+  'B+' = 3.3,
+  'B0' = 3.0,
+  'B-' = 2.7,
+  'C+' = 2.3,
+  'C0' = 2.0,
+  'C-' = 2.7,
+  'D+' = 2.3,
+  'D0' = 1.0,
+  'D-' = 0.7,
+  'F' = 0,
+}
+
+export type Course =
+  | '기초교양'
+  | '전공탐색'
+  | '전인교양'
+  | '전공선택'
+  | '전공필수'
+  | '일반선택'
+
 type Univs =
   | '인문대학'
   | '사회과학대학'
@@ -35,22 +74,9 @@ type Univs =
   | '예술대자인대학'
   | '미래융합대학'
 
-export interface Grade {
+export interface GradeSet {
   credit: 0 | 2 | 3 | 4
-  dg_gb:
-    | 'A+'
-    | 'A0'
-    | 'A-'
-    | 'B+'
-    | 'B0'
-    | 'B-'
-    | 'C+'
-    | 'C0'
-    | 'C-'
-    | 'D+'
-    | 'D0'
-    | 'D-'
-    | 'F'
+  dg_gb: GradePoint
   isu_cd:
     | 'A.기초교양'
     | 'B.전공탐색'
@@ -58,13 +84,7 @@ export interface Grade {
     | 'L.전공선택'
     | 'D.전공필수'
     | 'G.일반선택'
-  isu_nm:
-    | '기초교양'
-    | '전공탐색'
-    | '전인교양'
-    | '전공선택'
-    | '전공필수'
-    | '일반선택'
+  isu_nm: Course
   mark: Point
   rownum: RowCount
   subject_cd: string // 과목 코드
@@ -133,6 +153,6 @@ interface TotalGradeSummary extends ParentGradeProps {
 }
 
 export type PostprocessedItem = {
-  GRID_DATA: Grade[]
+  GRID_DATA: GradeSet[]
   BOTTOM_DATA: CurrentSearchedGradeSummary
 }
