@@ -138,27 +138,8 @@ const fetchSemester = ({ cookie, data }: FetchSemesterParams) =>
     cookie,
   })
 
-export const fetchAndParse = async (account: UserNoPw) => {
-  const { data, cookie } = await fetchList(account)
-  const {
-    TOP_DATA: { avg_mark: averagePoint },
-    TERMNOW_DATA,
-    PERSON_DATA: { nm: name },
-  } = data
-
-  const eachSemesterRequireProps = TERMNOW_DATA.map(
-    ({ year, term_gb, outside_seq }) => ({
-      year,
-      term_gb,
-      outside_seq,
-    })
-  )
-
-  const fetchedSemester = await Promise.all(
-    eachSemesterRequireProps.map(data => fetchSemester({ cookie, data }))
-  )
-
-  const semesters = fetchedSemester.map(
+const postSemester = (semesters: PostprocessedItem[]) =>
+  semesters.map(
     ({
       BOTTOM_DATA: {
         avg_mark: averagePoint,
@@ -175,5 +156,27 @@ export const fetchAndParse = async (account: UserNoPw) => {
       year,
     })
   )
-  return { name, averagePoint, semesters }
+
+const postListItem = (list: ListItem[]) =>
+  list.map(({ year, term_gb, outside_seq }) => ({
+    year,
+    term_gb,
+    outside_seq,
+  }))
+
+export const fetchAndParse = async (account: UserNoPw) => {
+  const {
+    data: {
+      TOP_DATA: { avg_mark: averagePoint },
+      TERMNOW_DATA: listItem,
+      PERSON_DATA: { nm: name },
+    },
+    cookie,
+  } = await fetchList(account)
+
+  const fetchedSemester = await Promise.all(
+    postListItem(listItem).map(data => fetchSemester({ cookie, data }))
+  )
+
+  return { name, averagePoint, semesters: postSemester(fetchedSemester) }
 }
