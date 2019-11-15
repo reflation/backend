@@ -1,6 +1,4 @@
-type Literal = {
-  [key: string]: string
-}
+type Literal = Record<string, string>
 type NumLiteral = {
   [key: string]: string | number
 }
