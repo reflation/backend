@@ -1,4 +1,4 @@
-type Semester = '1학기' | '하기계절' | '2학기' | '동기계절'
+type SemesterCategory = '1학기' | '하기계절' | '2학기' | '동기계절'
 type SemesterNum = 10 | 11 | 20 | 21
 type RowCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 type Status = '재학' | '휴힉'
@@ -69,7 +69,7 @@ export interface Grade {
   rownum: RowCount
   subject_cd: string // 과목 코드
   subject_nm: string // 고목 이름
-  term_gb: Semester
+  term_gb: SemesterCategory
   year: Year
 }
 
@@ -79,7 +79,7 @@ export interface ListItem {
   outside_seq: 0 | 1
   rownum: RowCount
   term_gb: SemesterNum
-  term_mn: Semester
+  term_mn: SemesterCategory
   tot_mark: 32.3
   year: Year
 }
@@ -118,11 +118,11 @@ export type PostprocessedList = {
 
 export interface CurrentSearchedGradeSummary extends ParentGradeProps {
   year: Year
-  term_gb: Semester
+  term_gb: SemesterCategory
   outside_gb?: '교류수학'
 }
 
-interface TotalGradeSummery extends ParentGradeProps {
+interface TotalGradeSummary extends ParentGradeProps {
   cls_cd: string
   grade: '1학년' | '2학년' | '3학년' | '4학년'
   nm: string
