@@ -1,7 +1,7 @@
 import request from 'request'
 import { base64Encode } from './base64'
 
-import { oneDepthLiteral, TwoDepthLiteralArray, List, Search } from './str2int'
+import { oneDepthLiteral, twoDepthLiteralArray, List, Search } from './str2int'
 
 import { FechParam, ListForm } from '../@types/params'
 import {
@@ -76,13 +76,13 @@ const getCookie = ({ student_no, student_pw }: UserNoPw) =>
 // post-processor
 // TODO: use decorator pattern to postprocessor
 const postList = (data: List): PostprocessedList => ({
-  TERMNOW_DATA: TwoDepthLiteralArray(data.TERMNOW_DATA) as ListItem[],
+  TERMNOW_DATA: twoDepthLiteralArray(data.TERMNOW_DATA) as ListItem[],
   PERSON_DATA: oneDepthLiteral(data.PERSON_DATA) as PersonalInfo,
   TOP_DATA: oneDepthLiteral(data.TOP_DATA) as ParentGradeProps,
 })
 
 const postItem = (data: Search): PostprocessedItem => ({
-  GRID_DATA: TwoDepthLiteralArray(data.GRID_DATA) as Grade[],
+  GRID_DATA: twoDepthLiteralArray(data.GRID_DATA) as Grade[],
   BOTTOM_DATA: oneDepthLiteral(data.BOTTOM_DATA) as CurrentSearchedGradeSummary,
 })
 

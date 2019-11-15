@@ -31,5 +31,5 @@ export const oneDepthLiteral = (data: Literal): unknown => {
   return result!
 }
 
-export const TwoDepthLiteralArray = (data: Literal[]) =>
+export const twoDepthLiteralArray = (data: Literal[]) =>
   data.map(value => oneDepthLiteral(value))
