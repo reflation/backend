@@ -1,2 +1,2 @@
 .env
-src/models/db.json
+src/models/prisma
