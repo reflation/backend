@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   semester: (where?: SemesterWhereInput) => Promise<boolean>;
+  subject: (where?: SubjectWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -58,6 +59,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => SemesterConnectionPromise;
+  subject: (where: SubjectWhereUniqueInput) => SubjectNullablePromise;
+  subjects: (args?: {
+    where?: SubjectWhereInput;
+    orderBy?: SubjectOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Subject>;
+  subjectsConnection: (args?: {
+    where?: SubjectWhereInput;
+    orderBy?: SubjectOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => SubjectConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -99,6 +119,22 @@ export interface Prisma {
   }) => SemesterPromise;
   deleteSemester: (where: SemesterWhereUniqueInput) => SemesterPromise;
   deleteManySemesters: (where?: SemesterWhereInput) => BatchPayloadPromise;
+  createSubject: (data: SubjectCreateInput) => SubjectPromise;
+  updateSubject: (args: {
+    data: SubjectUpdateInput;
+    where: SubjectWhereUniqueInput;
+  }) => SubjectPromise;
+  updateManySubjects: (args: {
+    data: SubjectUpdateManyMutationInput;
+    where?: SubjectWhereInput;
+  }) => BatchPayloadPromise;
+  upsertSubject: (args: {
+    where: SubjectWhereUniqueInput;
+    create: SubjectCreateInput;
+    update: SubjectUpdateInput;
+  }) => SubjectPromise;
+  deleteSubject: (where: SubjectWhereUniqueInput) => SubjectPromise;
+  deleteManySubjects: (where?: SubjectWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -127,6 +163,9 @@ export interface Subscription {
   semester: (
     where?: SemesterSubscriptionWhereInput
   ) => SemesterSubscriptionPayloadSubscription;
+  subject: (
+    where?: SubjectSubscriptionWhereInput
+  ) => SubjectSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -139,6 +178,18 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
+
+export type SubjectOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "code_ASC"
+  | "code_DESC"
+  | "grade_ASC"
+  | "grade_DESC"
+  | "course_ASC"
+  | "course_DESC";
 
 export type SemesterType = "FIRST" | "SUMMER" | "SECOND" | "WINTER";
 
@@ -174,6 +225,82 @@ export type SemesterWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
+export interface SubjectWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  code?: Maybe<String>;
+  code_not?: Maybe<String>;
+  code_in?: Maybe<String[] | String>;
+  code_not_in?: Maybe<String[] | String>;
+  code_lt?: Maybe<String>;
+  code_lte?: Maybe<String>;
+  code_gt?: Maybe<String>;
+  code_gte?: Maybe<String>;
+  code_contains?: Maybe<String>;
+  code_not_contains?: Maybe<String>;
+  code_starts_with?: Maybe<String>;
+  code_not_starts_with?: Maybe<String>;
+  code_ends_with?: Maybe<String>;
+  code_not_ends_with?: Maybe<String>;
+  grade?: Maybe<String>;
+  grade_not?: Maybe<String>;
+  grade_in?: Maybe<String[] | String>;
+  grade_not_in?: Maybe<String[] | String>;
+  grade_lt?: Maybe<String>;
+  grade_lte?: Maybe<String>;
+  grade_gt?: Maybe<String>;
+  grade_gte?: Maybe<String>;
+  grade_contains?: Maybe<String>;
+  grade_not_contains?: Maybe<String>;
+  grade_starts_with?: Maybe<String>;
+  grade_not_starts_with?: Maybe<String>;
+  grade_ends_with?: Maybe<String>;
+  grade_not_ends_with?: Maybe<String>;
+  course?: Maybe<String>;
+  course_not?: Maybe<String>;
+  course_in?: Maybe<String[] | String>;
+  course_not_in?: Maybe<String[] | String>;
+  course_lt?: Maybe<String>;
+  course_lte?: Maybe<String>;
+  course_gt?: Maybe<String>;
+  course_gte?: Maybe<String>;
+  course_contains?: Maybe<String>;
+  course_not_contains?: Maybe<String>;
+  course_starts_with?: Maybe<String>;
+  course_not_starts_with?: Maybe<String>;
+  course_ends_with?: Maybe<String>;
+  course_not_ends_with?: Maybe<String>;
+  AND?: Maybe<SubjectWhereInput[] | SubjectWhereInput>;
+  OR?: Maybe<SubjectWhereInput[] | SubjectWhereInput>;
+  NOT?: Maybe<SubjectWhereInput[] | SubjectWhereInput>;
+}
+
 export interface SemesterWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
@@ -189,6 +316,9 @@ export interface SemesterWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  subjects_every?: Maybe<SubjectWhereInput>;
+  subjects_some?: Maybe<SubjectWhereInput>;
+  subjects_none?: Maybe<SubjectWhereInput>;
   averagePoint?: Maybe<Float>;
   averagePoint_not?: Maybe<Float>;
   averagePoint_in?: Maybe<Float[] | Float>;
@@ -223,6 +353,10 @@ export interface SemesterWhereInput {
   OR?: Maybe<SemesterWhereInput[] | SemesterWhereInput>;
   NOT?: Maybe<SemesterWhereInput[] | SemesterWhereInput>;
 }
+
+export type SubjectWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -298,6 +432,7 @@ export interface UserWhereInput {
 
 export interface SemesterCreateInput {
   id?: Maybe<ID_Input>;
+  subjects?: Maybe<SubjectCreateManyInput>;
   averagePoint: Float;
   totalCredit: Int;
   isOutside?: Maybe<Boolean>;
@@ -305,12 +440,153 @@ export interface SemesterCreateInput {
   semester: SemesterType;
 }
 
+export interface SubjectCreateManyInput {
+  create?: Maybe<SubjectCreateInput[] | SubjectCreateInput>;
+  connect?: Maybe<SubjectWhereUniqueInput[] | SubjectWhereUniqueInput>;
+}
+
+export interface SubjectCreateInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  code: String;
+  grade: String;
+  course: String;
+}
+
 export interface SemesterUpdateInput {
+  subjects?: Maybe<SubjectUpdateManyInput>;
   averagePoint?: Maybe<Float>;
   totalCredit?: Maybe<Int>;
   isOutside?: Maybe<Boolean>;
   year?: Maybe<Int>;
   semester?: Maybe<SemesterType>;
+}
+
+export interface SubjectUpdateManyInput {
+  create?: Maybe<SubjectCreateInput[] | SubjectCreateInput>;
+  update?: Maybe<
+    | SubjectUpdateWithWhereUniqueNestedInput[]
+    | SubjectUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | SubjectUpsertWithWhereUniqueNestedInput[]
+    | SubjectUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<SubjectWhereUniqueInput[] | SubjectWhereUniqueInput>;
+  connect?: Maybe<SubjectWhereUniqueInput[] | SubjectWhereUniqueInput>;
+  set?: Maybe<SubjectWhereUniqueInput[] | SubjectWhereUniqueInput>;
+  disconnect?: Maybe<SubjectWhereUniqueInput[] | SubjectWhereUniqueInput>;
+  deleteMany?: Maybe<SubjectScalarWhereInput[] | SubjectScalarWhereInput>;
+  updateMany?: Maybe<
+    | SubjectUpdateManyWithWhereNestedInput[]
+    | SubjectUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface SubjectUpdateWithWhereUniqueNestedInput {
+  where: SubjectWhereUniqueInput;
+  data: SubjectUpdateDataInput;
+}
+
+export interface SubjectUpdateDataInput {
+  title?: Maybe<String>;
+  code?: Maybe<String>;
+  grade?: Maybe<String>;
+  course?: Maybe<String>;
+}
+
+export interface SubjectUpsertWithWhereUniqueNestedInput {
+  where: SubjectWhereUniqueInput;
+  update: SubjectUpdateDataInput;
+  create: SubjectCreateInput;
+}
+
+export interface SubjectScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  code?: Maybe<String>;
+  code_not?: Maybe<String>;
+  code_in?: Maybe<String[] | String>;
+  code_not_in?: Maybe<String[] | String>;
+  code_lt?: Maybe<String>;
+  code_lte?: Maybe<String>;
+  code_gt?: Maybe<String>;
+  code_gte?: Maybe<String>;
+  code_contains?: Maybe<String>;
+  code_not_contains?: Maybe<String>;
+  code_starts_with?: Maybe<String>;
+  code_not_starts_with?: Maybe<String>;
+  code_ends_with?: Maybe<String>;
+  code_not_ends_with?: Maybe<String>;
+  grade?: Maybe<String>;
+  grade_not?: Maybe<String>;
+  grade_in?: Maybe<String[] | String>;
+  grade_not_in?: Maybe<String[] | String>;
+  grade_lt?: Maybe<String>;
+  grade_lte?: Maybe<String>;
+  grade_gt?: Maybe<String>;
+  grade_gte?: Maybe<String>;
+  grade_contains?: Maybe<String>;
+  grade_not_contains?: Maybe<String>;
+  grade_starts_with?: Maybe<String>;
+  grade_not_starts_with?: Maybe<String>;
+  grade_ends_with?: Maybe<String>;
+  grade_not_ends_with?: Maybe<String>;
+  course?: Maybe<String>;
+  course_not?: Maybe<String>;
+  course_in?: Maybe<String[] | String>;
+  course_not_in?: Maybe<String[] | String>;
+  course_lt?: Maybe<String>;
+  course_lte?: Maybe<String>;
+  course_gt?: Maybe<String>;
+  course_gte?: Maybe<String>;
+  course_contains?: Maybe<String>;
+  course_not_contains?: Maybe<String>;
+  course_starts_with?: Maybe<String>;
+  course_not_starts_with?: Maybe<String>;
+  course_ends_with?: Maybe<String>;
+  course_not_ends_with?: Maybe<String>;
+  AND?: Maybe<SubjectScalarWhereInput[] | SubjectScalarWhereInput>;
+  OR?: Maybe<SubjectScalarWhereInput[] | SubjectScalarWhereInput>;
+  NOT?: Maybe<SubjectScalarWhereInput[] | SubjectScalarWhereInput>;
+}
+
+export interface SubjectUpdateManyWithWhereNestedInput {
+  where: SubjectScalarWhereInput;
+  data: SubjectUpdateManyDataInput;
+}
+
+export interface SubjectUpdateManyDataInput {
+  title?: Maybe<String>;
+  code?: Maybe<String>;
+  grade?: Maybe<String>;
+  course?: Maybe<String>;
 }
 
 export interface SemesterUpdateManyMutationInput {
@@ -319,6 +595,20 @@ export interface SemesterUpdateManyMutationInput {
   isOutside?: Maybe<Boolean>;
   year?: Maybe<Int>;
   semester?: Maybe<SemesterType>;
+}
+
+export interface SubjectUpdateInput {
+  title?: Maybe<String>;
+  code?: Maybe<String>;
+  grade?: Maybe<String>;
+  course?: Maybe<String>;
+}
+
+export interface SubjectUpdateManyMutationInput {
+  title?: Maybe<String>;
+  code?: Maybe<String>;
+  grade?: Maybe<String>;
+  course?: Maybe<String>;
 }
 
 export interface UserCreateInput {
@@ -368,6 +658,7 @@ export interface SemesterUpdateWithWhereUniqueNestedInput {
 }
 
 export interface SemesterUpdateDataInput {
+  subjects?: Maybe<SubjectUpdateManyInput>;
   averagePoint?: Maybe<Float>;
   totalCredit?: Maybe<Int>;
   isOutside?: Maybe<Boolean>;
@@ -465,6 +756,17 @@ export interface SemesterSubscriptionWhereInput {
   >;
 }
 
+export interface SubjectSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<SubjectWhereInput>;
+  AND?: Maybe<SubjectSubscriptionWhereInput[] | SubjectSubscriptionWhereInput>;
+  OR?: Maybe<SubjectSubscriptionWhereInput[] | SubjectSubscriptionWhereInput>;
+  NOT?: Maybe<SubjectSubscriptionWhereInput[] | SubjectSubscriptionWhereInput>;
+}
+
 export interface UserSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -491,6 +793,15 @@ export interface Semester {
 
 export interface SemesterPromise extends Promise<Semester>, Fragmentable {
   id: () => Promise<ID_Output>;
+  subjects: <T = FragmentableArray<Subject>>(args?: {
+    where?: SubjectWhereInput;
+    orderBy?: SubjectOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   averagePoint: () => Promise<Float>;
   totalCredit: () => Promise<Int>;
   isOutside: () => Promise<Boolean>;
@@ -502,6 +813,15 @@ export interface SemesterSubscription
   extends Promise<AsyncIterator<Semester>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  subjects: <T = Promise<AsyncIterator<SubjectSubscription>>>(args?: {
+    where?: SubjectWhereInput;
+    orderBy?: SubjectOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   averagePoint: () => Promise<AsyncIterator<Float>>;
   totalCredit: () => Promise<AsyncIterator<Int>>;
   isOutside: () => Promise<AsyncIterator<Boolean>>;
@@ -513,11 +833,56 @@ export interface SemesterNullablePromise
   extends Promise<Semester | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  subjects: <T = FragmentableArray<Subject>>(args?: {
+    where?: SubjectWhereInput;
+    orderBy?: SubjectOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   averagePoint: () => Promise<Float>;
   totalCredit: () => Promise<Int>;
   isOutside: () => Promise<Boolean>;
   year: () => Promise<Int>;
   semester: () => Promise<SemesterType>;
+}
+
+export interface Subject {
+  id: ID_Output;
+  title: String;
+  code: String;
+  grade: String;
+  course: String;
+}
+
+export interface SubjectPromise extends Promise<Subject>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  code: () => Promise<String>;
+  grade: () => Promise<String>;
+  course: () => Promise<String>;
+}
+
+export interface SubjectSubscription
+  extends Promise<AsyncIterator<Subject>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  code: () => Promise<AsyncIterator<String>>;
+  grade: () => Promise<AsyncIterator<String>>;
+  course: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SubjectNullablePromise
+  extends Promise<Subject | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  code: () => Promise<String>;
+  grade: () => Promise<String>;
+  course: () => Promise<String>;
 }
 
 export interface SemesterConnection {
@@ -595,6 +960,60 @@ export interface AggregateSemesterPromise
 
 export interface AggregateSemesterSubscription
   extends Promise<AsyncIterator<AggregateSemester>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SubjectConnection {
+  pageInfo: PageInfo;
+  edges: SubjectEdge[];
+}
+
+export interface SubjectConnectionPromise
+  extends Promise<SubjectConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SubjectEdge>>() => T;
+  aggregate: <T = AggregateSubjectPromise>() => T;
+}
+
+export interface SubjectConnectionSubscription
+  extends Promise<AsyncIterator<SubjectConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SubjectEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSubjectSubscription>() => T;
+}
+
+export interface SubjectEdge {
+  node: Subject;
+  cursor: String;
+}
+
+export interface SubjectEdgePromise extends Promise<SubjectEdge>, Fragmentable {
+  node: <T = SubjectPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SubjectEdgeSubscription
+  extends Promise<AsyncIterator<SubjectEdge>>,
+    Fragmentable {
+  node: <T = SubjectSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateSubject {
+  count: Int;
+}
+
+export interface AggregateSubjectPromise
+  extends Promise<AggregateSubject>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSubjectSubscription
+  extends Promise<AsyncIterator<AggregateSubject>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -788,6 +1207,59 @@ export interface SemesterPreviousValuesSubscription
   semester: () => Promise<AsyncIterator<SemesterType>>;
 }
 
+export interface SubjectSubscriptionPayload {
+  mutation: MutationType;
+  node: Subject;
+  updatedFields: String[];
+  previousValues: SubjectPreviousValues;
+}
+
+export interface SubjectSubscriptionPayloadPromise
+  extends Promise<SubjectSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SubjectPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SubjectPreviousValuesPromise>() => T;
+}
+
+export interface SubjectSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SubjectSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SubjectSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SubjectPreviousValuesSubscription>() => T;
+}
+
+export interface SubjectPreviousValues {
+  id: ID_Output;
+  title: String;
+  code: String;
+  grade: String;
+  course: String;
+}
+
+export interface SubjectPreviousValuesPromise
+  extends Promise<SubjectPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  code: () => Promise<String>;
+  grade: () => Promise<String>;
+  course: () => Promise<String>;
+}
+
+export interface SubjectPreviousValuesSubscription
+  extends Promise<AsyncIterator<SubjectPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  code: () => Promise<AsyncIterator<String>>;
+  grade: () => Promise<AsyncIterator<String>>;
+  course: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -848,9 +1320,9 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Float = number;
+export type String = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
@@ -858,14 +1330,14 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 export type Int = number;
 
 /*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+*/
+export type Float = number;
+
+/*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -894,6 +1366,10 @@ export const models: Model[] = [
   },
   {
     name: "Semester",
+    embedded: false
+  },
+  {
+    name: "Subject",
     embedded: false
   }
 ];
