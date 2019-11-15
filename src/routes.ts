@@ -8,14 +8,14 @@ import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
 import { fetchAndParse, isFetch401 } from './utils/fetch'
-import { TypeReq, TypeReqAuth, TypePayloadRes } from './@types/params'
+import { Req, ReqAuth, ResPayload } from './@types/params'
 
 dotenv.config()
 
 const mode = process.env.mode!
 
 export const loginRoute = async (
-  { body: { mailid } }: TypeReq<{ mailid: string }>,
+  { body: { mailid } }: Req<{ mailid: string }>,
   res: Response
 ) => {
   const result = await login(mailid)
@@ -40,25 +40,22 @@ export const loginRoute = async (
   res.status(201).end()
 }
 
-type fetchError = { type: string; message: string }
+type FetchError = { type: string; message: string }
 
-export const fetchRoute = async (
-  { body }: TypeReqAuth,
-  res: TypePayloadRes
-) => {
+export const fetchRoute = async ({ body }: ReqAuth, res: ResPayload) => {
   try {
     const data = await fetchAndParse(body)
     await appnedUserData({ ...data, mailid: res.locals.mailid })
     res.status(201).end()
   } catch (e) {
-    const { type, message }: fetchError = e
+    const { type, message }: FetchError = e
     isFetch401(type)
       ? res.status(401).send({ type, message })
       : res.status(500).end()
   }
 }
 
-export const cacheRoute = async (req: Request, res: TypePayloadRes) => {
+export const cacheRoute = async (req: Request, res: ResPayload) => {
   try {
     const data = await searchUser(res.locals.mailid)
     data.name ? res.status(200).send(data) : res.status(204).end()

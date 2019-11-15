@@ -1,10 +1,10 @@
-type tSemester = '1학기' | '하기계절' | '2학기' | '동기계절'
-type tSemesterNum = 10 | 11 | 20 | 21
-type tRowCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
-type tStatus = '재학' | '휴힉'
-type tYear = 2018 | 2019
-type tBoolInt = 0 | 1
-type point =
+type SemesterCategory = '1학기' | '하기계절' | '2학기' | '동기계절'
+type SemesterNum = 10 | 11 | 20 | 21
+type RowCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
+type Status = '재학' | '휴힉'
+type Year = 2018 | 2019
+type BoolInt = 0 | 1
+type Point =
   | 4.3
   | 4.0
   | 3.7
@@ -19,7 +19,7 @@ type point =
   | 0.7
   | 0.0
 
-type tUnivs =
+type Univs =
   | '인문대학'
   | '사회과학대학'
   | '경상대학'
@@ -35,7 +35,7 @@ type tUnivs =
   | '예술대자인대학'
   | '미래융합대학'
 
-export interface grade {
+export interface Grade {
   credit: 0 | 2 | 3 | 4
   dg_gb:
     | 'A+'
@@ -65,26 +65,26 @@ export interface grade {
     | '전공선택'
     | '전공필수'
     | '일반선택'
-  mark: point
-  rownum: tRowCount
+  mark: Point
+  rownum: RowCount
   subject_cd: string // 과목 코드
   subject_nm: string // 고목 이름
-  term_gb: tSemester
-  year: tYear
+  term_gb: SemesterCategory
+  year: Year
 }
 
-export interface listItem {
+export interface ListItem {
   avg_mark: number
   get_credit: number
   outside_seq: 0 | 1
-  rownum: tRowCount
-  term_gb: tSemesterNum
-  term_mn: tSemester
+  rownum: RowCount
+  term_gb: SemesterNum
+  term_mn: SemesterCategory
   tot_mark: 32.3
-  year: tYear
+  year: Year
 }
 
-export interface personalInfo {
+export interface PersonalInfo {
   cls_cd: number
   cls_nm: string // 학과
   course_gb: number
@@ -93,14 +93,14 @@ export interface personalInfo {
   nm: string // 이름,
   nm_eng: string // 영문이름
   rownum: 0
-  status_gb: tStatus
+  status_gb: Status
   status_gb2: 1 | 0
   stu_gb: 1
   student_no: number
   univ_cd: number
 }
 
-export interface parent_grade_props {
+export interface ParentGradeProps {
   apply_credit: number
   avg_mark: number
   avg_mark45: number
@@ -111,28 +111,28 @@ export interface parent_grade_props {
 }
 
 export type PostprocessedList = {
-  TERMNOW_DATA: listItem[]
-  PERSON_DATA: personalInfo
-  TOP_DATA: parent_grade_props
+  TERMNOW_DATA: ListItem[]
+  PERSON_DATA: PersonalInfo
+  TOP_DATA: ParentGradeProps
 }
 
-export interface current_searched_grade_summary extends parent_grade_props {
-  year: tYear
-  term_gb: tSemester
+export interface CurrentSearchedGradeSummary extends ParentGradeProps {
+  year: Year
+  term_gb: SemesterCategory
   outside_gb?: '교류수학'
 }
 
-interface total_grade_summery extends parent_grade_props {
+interface TotalGradeSummary extends ParentGradeProps {
   cls_cd: string
   grade: '1학년' | '2학년' | '3학년' | '4학년'
   nm: string
   rownum: 0
-  status_gb: tStatus
-  student_no: tYmber
-  univ_cd: tUnivs
+  status_gb: Status
+  student_no: number
+  univ_cd: Univs
 }
 
 export type PostprocessedItem = {
-  GRID_DATA: grade[]
-  BOTTOM_DATA: current_searched_grade_summary
+  GRID_DATA: Grade[]
+  BOTTOM_DATA: CurrentSearchedGradeSummary
 }

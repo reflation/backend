@@ -1,29 +1,19 @@
 import request from 'request'
 import { base64Encode } from './base64'
 
-import {
-  oneDepthLiteral,
-  TwoDepthLiteralArray,
-  TypeList,
-  TypeSearch,
-} from './str2int'
+import { oneDepthLiteral, twoDepthLiteralArray, List, Search } from './str2int'
 
-import { TypeFechParam, TypeListForm } from '../@types/params'
+import { FechParam, ListForm } from '../@types/params'
 import {
   PostprocessedList,
   PostprocessedItem,
-  listItem,
-  personalInfo,
-  parent_grade_props,
-  grade,
-  current_searched_grade_summary,
+  ListItem,
+  PersonalInfo,
+  ParentGradeProps,
+  Grade,
+  CurrentSearchedGradeSummary,
 } from '../@types/dreamy'
-import {
-  TypeUserNoPw,
-  TypeUser,
-  enumSemester,
-  TypeSemester,
-} from '../@types/models'
+import { UserNoPw, User, EnumSemester, Semester } from '../@types/models'
 
 const BaseURL = 'https://dreamy.jejunu.ac.kr'
 const rejectUnauthorized = false
@@ -48,12 +38,12 @@ const semesterNumStr = {
   동기계절: '동기계절' as '동기계절',
 }
 
-type TypefetchSemesterParams = {
+type FetchSemesterParams = {
   cookie: string
-  data: Omit<TypeListForm, 'mode'>
+  data: Omit<ListForm, 'mode'>
 }
 
-const getCookie = ({ student_no, student_pw }: TypeUserNoPw) =>
+const getCookie = ({ student_no, student_pw }: UserNoPw) =>
   new Promise<string>((res, rej) => {
     request.post(
       `${BaseURL}/frame/sysUser.do?next=`,
@@ -85,20 +75,18 @@ const getCookie = ({ student_no, student_pw }: TypeUserNoPw) =>
 
 // post-processor
 // TODO: use decorator pattern to postprocessor
-const postList = (data: TypeList): PostprocessedList => ({
-  TERMNOW_DATA: TwoDepthLiteralArray(data.TERMNOW_DATA) as listItem[],
-  PERSON_DATA: oneDepthLiteral(data.PERSON_DATA) as personalInfo,
-  TOP_DATA: oneDepthLiteral(data.TOP_DATA) as parent_grade_props,
+const postList = (data: List): PostprocessedList => ({
+  TERMNOW_DATA: twoDepthLiteralArray(data.TERMNOW_DATA) as ListItem[],
+  PERSON_DATA: oneDepthLiteral(data.PERSON_DATA) as PersonalInfo,
+  TOP_DATA: oneDepthLiteral(data.TOP_DATA) as ParentGradeProps,
 })
 
-const postItem = (data: TypeSearch): PostprocessedItem => ({
-  GRID_DATA: TwoDepthLiteralArray(data.GRID_DATA) as grade[],
-  BOTTOM_DATA: oneDepthLiteral(
-    data.BOTTOM_DATA
-  ) as current_searched_grade_summary,
+const postItem = (data: Search): PostprocessedItem => ({
+  GRID_DATA: twoDepthLiteralArray(data.GRID_DATA) as Grade[],
+  BOTTOM_DATA: oneDepthLiteral(data.BOTTOM_DATA) as CurrentSearchedGradeSummary,
 })
 
-export const listFetcher = ({ form, ...account }: TypeFechParam) =>
+export const listFetcher = ({ form, ...account }: FechParam) =>
   new Promise<{ data: PostprocessedList; cookie: string }>(async (res, rej) => {
     const cookie = await getCookie(account)
     request.post(
@@ -120,7 +108,7 @@ export const itemFetcher = ({
   form,
   cookie,
 }: {
-  form: TypeListForm
+  form: ListForm
   cookie: string
 }) =>
   new Promise<PostprocessedItem>(async (res, rej) => {
@@ -141,16 +129,16 @@ export const itemFetcher = ({
     )
   })
 
-const fetchList = (data: TypeUserNoPw) =>
+const fetchList = (data: UserNoPw) =>
   listFetcher({ ...data, form: { mode: 'doSearch' } })
 
-const fetchSemester = ({ cookie, data }: TypefetchSemesterParams) =>
+const fetchSemester = ({ cookie, data }: FetchSemesterParams) =>
   itemFetcher({
     form: { mode: 'doList', ...data },
     cookie,
   })
 
-export const fetchAndParse = async (account: TypeUserNoPw) => {
+export const fetchAndParse = async (account: UserNoPw) => {
   const { data, cookie } = await fetchList(account)
   const {
     TOP_DATA: { avg_mark: averagePoint },
@@ -183,7 +171,7 @@ export const fetchAndParse = async (account: TypeUserNoPw) => {
       averagePoint,
       totalCredit,
       isOutside: !!outside_gb,
-      semester: enumSemester[semesterNumStr[term_gb]],
+      semester: EnumSemester[semesterNumStr[term_gb]],
       year,
     })
   )

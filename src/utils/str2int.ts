@@ -1,26 +1,24 @@
-type strLiteral = {
-  [key: string]: string
-}
-type strOrNumLiteral = {
+type Literal = Record<string, string>
+type NumLiteral = {
   [key: string]: string | number
 }
 
-export type TypeList = {
-  TERMNOW_DATA: strLiteral[]
-  PERSON_DATA: strLiteral
+export type List = {
+  TERMNOW_DATA: Literal[]
+  PERSON_DATA: Literal
   TERM_DATA: null[]
-  TOP_DATA: strLiteral
+  TOP_DATA: Literal
 }
 
-export type TypeSearch = {
-  GRID_DATA: strLiteral[]
-  BOTTOM_DATA: strLiteral
-  TOP_DATA: strLiteral
+export type Search = {
+  GRID_DATA: Literal[]
+  BOTTOM_DATA: Literal
+  TOP_DATA: Literal
 }
 
 // hack(unknown type): type safely for '../@types/dreamy.ts': type 'PostprocessedList' or 'PostprocessedItem'
-export const oneDepthLiteral = (data: strLiteral): unknown => {
-  let result: strOrNumLiteral = {}
+export const oneDepthLiteral = (data: Literal): unknown => {
+  let result: NumLiteral = {}
   Object.keys(data).forEach(key => {
     const value = data[key]
     if (value.length)
@@ -33,5 +31,5 @@ export const oneDepthLiteral = (data: strLiteral): unknown => {
   return result!
 }
 
-export const TwoDepthLiteralArray = (data: strLiteral[]) =>
+export const twoDepthLiteralArray = (data: Literal[]) =>
   data.map(value => oneDepthLiteral(value))

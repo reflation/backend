@@ -4,7 +4,7 @@ import { isUserExist, createUser } from './models'
 import { signToken } from './jwt'
 import { searchUser } from './models'
 
-type TypeRes = {
+type Res = {
   result: boolean
   isUserExist?: 'Y'
 }
@@ -23,7 +23,7 @@ const isNotVaild = (mailid: string) =>
         // jsonReviver: (body: string) => JSON.parse(body),
       },
       (err, req, body: string) => {
-        const { result }: TypeRes = JSON.parse(body)
+        const { result }: Res = JSON.parse(body)
         res(result)
       }
     )

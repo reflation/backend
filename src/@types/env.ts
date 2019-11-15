@@ -1,4 +1,4 @@
-export interface TypeEnv extends NodeJS.ProcessEnv {
+export interface Env extends NodeJS.ProcessEnv {
   service: 'gmail'
   user: string
   pass: string
