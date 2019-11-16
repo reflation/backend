@@ -13,7 +13,7 @@ type Subject = {
 }
 
 export type Semester = {
-  subject: Subject[]
+  subjects: Subject[]
   averagePoint: number // Float
   totalCredit: number
   isOutside: boolean
