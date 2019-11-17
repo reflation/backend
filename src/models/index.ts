@@ -17,6 +17,12 @@ export const searchUser = async (mailid: string): Promise<User> => {
     name
     averagePoint
     semesters {
+      subjects {
+        title
+        code
+        grade
+        course
+      }
       averagePoint
       totalCredit
       isOutside
