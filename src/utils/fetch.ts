@@ -155,8 +155,8 @@ const postSemester = (semesters: PostprocessedItem[]) =>
           subject_nm: title,
           subject_cd: code,
           dg_gb: grade,
-          isu_nm: type,
-        }) => ({ title, code, grade, type })
+          isu_nm: course,
+        }) => ({ title, code, grade, course })
       )
       return {
         subjects,
