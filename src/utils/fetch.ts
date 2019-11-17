@@ -150,16 +150,16 @@ const postSemester = (semesters: PostprocessedItem[]) =>
         outside_gb,
       },
     }) => {
-      const subject = GRID_DATA.map(
+      const subjects = GRID_DATA.map(
         ({
           subject_nm: title,
           subject_cd: code,
           dg_gb: grade,
-          isu_nm: type,
-        }) => ({ title, code, grade, type })
+          isu_nm: course,
+        }) => ({ title, code, grade, course })
       )
       return {
-        subject,
+        subjects,
         averagePoint,
         totalCredit,
         isOutside: !!outside_gb,
