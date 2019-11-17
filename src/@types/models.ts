@@ -9,7 +9,7 @@ type Subject = {
   title: string
   code: string
   grade: GradePoint
-  type: Course
+  course: Course
 }
 
 export type Semester = {

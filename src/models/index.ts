@@ -33,10 +33,17 @@ export const searchUser = async (mailid: string): Promise<User> => {
 export const isUserExist = (mailid: string) => prisma.$exists.user({ mailid })
 
 export const appnedUserData = (data: User): Promise<PrismaUser> => {
+  if (!data.semesters) data.semesters = []
+
   const query: UserUpdateInput = {
     ...data,
     semesters: {
-      create: data.semesters, // Assuming there's none to update
+      create: data.semesters.map(semester => ({
+        ...semester,
+        subjects: {
+          create: semester.subjects,
+        },
+      })), // Assuming there's none to update
     },
   }
 
