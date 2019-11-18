@@ -5,7 +5,7 @@
 
 제주대학교 학사 관리 서비스 [하영드리미](https://dreamy.jejunu.ac.kr/)의 UX 개선 프로젝트
 
-[Documentation](https://reflation.gitbook.io/reflation)
+[Documentation](https://x86chi.gitbook.io/reflation)
 
 ## License
 
