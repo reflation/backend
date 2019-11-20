@@ -1,7 +1,5 @@
 type Literal = Record<string, string>
-type NumLiteral = {
-  [key: string]: string | number
-}
+type NumLiteral = Record<string, string | number>
 
 export type List = {
   TERMNOW_DATA: Literal[]

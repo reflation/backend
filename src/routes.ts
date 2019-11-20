@@ -7,7 +7,8 @@ import { login, LoginResult } from './checkVaild'
 import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
-import { fetchAndParse, isFetch401 } from './utils/fetch'
+import { fetchAndParse } from './fetch'
+import { isFetch401 } from './fetch/consts'
 import { Req, ReqAuth, ResPayload } from './@types/params'
 
 dotenv.config()

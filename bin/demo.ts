@@ -1,4 +1,4 @@
-import { fetchAndParse } from '../src/utils/fetch'
+import { fetchAndParse } from '../src/fetch'
 import dotenv from 'dotenv'
 
 dotenv.config()
