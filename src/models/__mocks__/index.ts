@@ -11,7 +11,9 @@ export const createUser = async (input: UserCreateInput) => {
     createdAt: new Date().toISOString(),
     ...input,
     averagePoint: input.averagePoint || 3.5,
+    totalPoint: input.totalPoint || 0.0,
     name: input.name || undefined,
+    subMajor: input.subMajor || undefined,
     id: input.id ? input.id.toString() : cuid(),
   }
   users.push(user)
@@ -37,6 +39,7 @@ export const appendUserData = (data: User) =>
       ...users[foundIndex],
       ...others,
       name: others.name || undefined,
+      subMajor: others.subMajor || undefined,
     }
     res(users[foundIndex])
   })
