@@ -1,4 +1,4 @@
-import { GradePoint, Course } from './dreamy'
+import { GradePoint, Course, College } from './dreamy'
 
 export interface UserNoPw {
   student_no: number
@@ -24,7 +24,12 @@ export type Semester = {
 export type User = {
   name: string | null
   mailid: string
-  averagePoint: number // Float
+  studentID: number
+  averagePoint: number
+  totalPoint: number
+  major: string
+  subMajor: string | null
+  college: College
   semesters: Semester[] | null
 }
 

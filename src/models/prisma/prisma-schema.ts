@@ -622,6 +622,11 @@ type User {
   name: String
   createdAt: DateTime!
   averagePoint: Float!
+  totalPoint: Float!
+  major: String
+  subMajor: String
+  studentID: Int
+  college: String
   semesters(where: SemesterWhereInput, orderBy: SemesterOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Semester!]
 }
 
@@ -636,6 +641,11 @@ input UserCreateInput {
   mailid: String!
   name: String
   averagePoint: Float
+  totalPoint: Float
+  major: String
+  subMajor: String
+  studentID: Int
+  college: String
   semesters: SemesterCreateManyInput
 }
 
@@ -655,6 +665,16 @@ enum UserOrderByInput {
   createdAt_DESC
   averagePoint_ASC
   averagePoint_DESC
+  totalPoint_ASC
+  totalPoint_DESC
+  major_ASC
+  major_DESC
+  subMajor_ASC
+  subMajor_DESC
+  studentID_ASC
+  studentID_DESC
+  college_ASC
+  college_DESC
 }
 
 type UserPreviousValues {
@@ -663,6 +683,11 @@ type UserPreviousValues {
   name: String
   createdAt: DateTime!
   averagePoint: Float!
+  totalPoint: Float!
+  major: String
+  subMajor: String
+  studentID: Int
+  college: String
 }
 
 type UserSubscriptionPayload {
@@ -687,6 +712,11 @@ input UserUpdateInput {
   mailid: String
   name: String
   averagePoint: Float
+  totalPoint: Float
+  major: String
+  subMajor: String
+  studentID: Int
+  college: String
   semesters: SemesterUpdateManyInput
 }
 
@@ -694,6 +724,11 @@ input UserUpdateManyMutationInput {
   mailid: String
   name: String
   averagePoint: Float
+  totalPoint: Float
+  major: String
+  subMajor: String
+  studentID: Int
+  college: String
 }
 
 input UserWhereInput {
@@ -755,6 +790,64 @@ input UserWhereInput {
   averagePoint_lte: Float
   averagePoint_gt: Float
   averagePoint_gte: Float
+  totalPoint: Float
+  totalPoint_not: Float
+  totalPoint_in: [Float!]
+  totalPoint_not_in: [Float!]
+  totalPoint_lt: Float
+  totalPoint_lte: Float
+  totalPoint_gt: Float
+  totalPoint_gte: Float
+  major: String
+  major_not: String
+  major_in: [String!]
+  major_not_in: [String!]
+  major_lt: String
+  major_lte: String
+  major_gt: String
+  major_gte: String
+  major_contains: String
+  major_not_contains: String
+  major_starts_with: String
+  major_not_starts_with: String
+  major_ends_with: String
+  major_not_ends_with: String
+  subMajor: String
+  subMajor_not: String
+  subMajor_in: [String!]
+  subMajor_not_in: [String!]
+  subMajor_lt: String
+  subMajor_lte: String
+  subMajor_gt: String
+  subMajor_gte: String
+  subMajor_contains: String
+  subMajor_not_contains: String
+  subMajor_starts_with: String
+  subMajor_not_starts_with: String
+  subMajor_ends_with: String
+  subMajor_not_ends_with: String
+  studentID: Int
+  studentID_not: Int
+  studentID_in: [Int!]
+  studentID_not_in: [Int!]
+  studentID_lt: Int
+  studentID_lte: Int
+  studentID_gt: Int
+  studentID_gte: Int
+  college: String
+  college_not: String
+  college_in: [String!]
+  college_not_in: [String!]
+  college_lt: String
+  college_lte: String
+  college_gt: String
+  college_gte: String
+  college_contains: String
+  college_not_contains: String
+  college_starts_with: String
+  college_not_starts_with: String
+  college_ends_with: String
+  college_not_ends_with: String
   semesters_every: SemesterWhereInput
   semesters_some: SemesterWhereInput
   semesters_none: SemesterWhereInput
