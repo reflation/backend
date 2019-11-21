@@ -1,7 +1,7 @@
 {
   "extends": ["@commitlint/config-conventional"],
   "rules": {
-    "header-case": [
+    "subject-case": [
       1,
       "always",
       [
