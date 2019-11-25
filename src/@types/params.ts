@@ -35,8 +35,6 @@ export type ListForm = {
   outside_seq: 0 | 1
 }
 
-export type SearchOrList = SearchForm | ListForm
-
-export interface FechParam extends UserNoPw {
-  form: SearchOrList
+export interface FetchParam extends UserNoPw {
+  form: SearchForm
 }

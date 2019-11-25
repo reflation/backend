@@ -3,7 +3,7 @@ import { base64Encode } from './base64'
 
 import { oneDepthLiteral, twoDepthLiteralArray, List, Search } from './str2int'
 
-import { FechParam, ListForm } from '../@types/params'
+import { FetchParam, ListForm } from '../@types/params'
 import {
   PostprocessedList,
   PostprocessedItem,
@@ -86,7 +86,7 @@ const postItem = (data: Search): PostprocessedItem => ({
   BOTTOM_DATA: oneDepthLiteral(data.BOTTOM_DATA) as CurrentSearchedGradeSummary,
 })
 
-export const listFetcher = ({ form, ...account }: FechParam) =>
+export const listFetcher = ({ form, ...account }: FetchParam) =>
   new Promise<{ data: PostprocessedList; cookie: string }>(async (res, rej) => {
     const cookie = await getCookie(account)
     request.post(
