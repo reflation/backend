@@ -92,7 +92,7 @@ export const postSemesters = (semesters: PostprocessedItem[]): Semester[] =>
           dg_gb: grade,
           isu_nm: course,
         }) => ({ title, code, grade, course })
-      )
+      ).filter(subject => subject.grade !== 'S')
       return {
         subjects,
         averagePoint,

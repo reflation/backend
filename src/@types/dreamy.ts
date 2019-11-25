@@ -33,6 +33,7 @@ export type GradePoint =
   | 'D0'
   | 'D-'
   | 'F'
+  | 'S'
 
 export enum GradeNum {
   'A+' = 4.3,
@@ -151,7 +152,7 @@ interface TotalGradeSummary extends ParentGradeProps {
   rownum: 0
   status_gb: Status
   student_no: number
-  univ_cd: Univs
+  univ_cd: College
 }
 
 export type PostprocessedItem = {
