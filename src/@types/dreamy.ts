@@ -33,6 +33,7 @@ export type GradePoint =
   | 'D0'
   | 'D-'
   | 'F'
+  | 'S'
 
 export enum GradeNum {
   'A+' = 4.3,
@@ -58,7 +59,7 @@ export type Course =
   | '전공필수'
   | '일반선택'
 
-type Univs =
+export type College =
   | '인문대학'
   | '사회과학대학'
   | '경상대학'
@@ -109,7 +110,8 @@ export interface PersonalInfo {
   cls_nm: string // 학과
   course_gb: number
   dbl_dept: string | null
-  group_gb: number
+  grade: 1 | 2 | 3 | 4 | 5
+  group_gb: 20
   nm: string // 이름,
   nm_eng: string // 영문이름
   rownum: 0
@@ -118,6 +120,7 @@ export interface PersonalInfo {
   stu_gb: 1
   student_no: number
   univ_cd: number
+  univ_nm: College
 }
 
 export interface ParentGradeProps {
@@ -149,7 +152,7 @@ interface TotalGradeSummary extends ParentGradeProps {
   rownum: 0
   status_gb: Status
   student_no: number
-  univ_cd: Univs
+  univ_cd: College
 }
 
 export type PostprocessedItem = {

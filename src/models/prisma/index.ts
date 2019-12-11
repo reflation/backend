@@ -217,7 +217,17 @@ export type UserOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "averagePoint_ASC"
-  | "averagePoint_DESC";
+  | "averagePoint_DESC"
+  | "totalPoint_ASC"
+  | "totalPoint_DESC"
+  | "major_ASC"
+  | "major_DESC"
+  | "subMajor_ASC"
+  | "subMajor_DESC"
+  | "studentID_ASC"
+  | "studentID_DESC"
+  | "college_ASC"
+  | "college_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -293,6 +303,64 @@ export interface UserWhereInput {
   averagePoint_lte?: Maybe<Float>;
   averagePoint_gt?: Maybe<Float>;
   averagePoint_gte?: Maybe<Float>;
+  totalPoint?: Maybe<Float>;
+  totalPoint_not?: Maybe<Float>;
+  totalPoint_in?: Maybe<Float[] | Float>;
+  totalPoint_not_in?: Maybe<Float[] | Float>;
+  totalPoint_lt?: Maybe<Float>;
+  totalPoint_lte?: Maybe<Float>;
+  totalPoint_gt?: Maybe<Float>;
+  totalPoint_gte?: Maybe<Float>;
+  major?: Maybe<String>;
+  major_not?: Maybe<String>;
+  major_in?: Maybe<String[] | String>;
+  major_not_in?: Maybe<String[] | String>;
+  major_lt?: Maybe<String>;
+  major_lte?: Maybe<String>;
+  major_gt?: Maybe<String>;
+  major_gte?: Maybe<String>;
+  major_contains?: Maybe<String>;
+  major_not_contains?: Maybe<String>;
+  major_starts_with?: Maybe<String>;
+  major_not_starts_with?: Maybe<String>;
+  major_ends_with?: Maybe<String>;
+  major_not_ends_with?: Maybe<String>;
+  subMajor?: Maybe<String>;
+  subMajor_not?: Maybe<String>;
+  subMajor_in?: Maybe<String[] | String>;
+  subMajor_not_in?: Maybe<String[] | String>;
+  subMajor_lt?: Maybe<String>;
+  subMajor_lte?: Maybe<String>;
+  subMajor_gt?: Maybe<String>;
+  subMajor_gte?: Maybe<String>;
+  subMajor_contains?: Maybe<String>;
+  subMajor_not_contains?: Maybe<String>;
+  subMajor_starts_with?: Maybe<String>;
+  subMajor_not_starts_with?: Maybe<String>;
+  subMajor_ends_with?: Maybe<String>;
+  subMajor_not_ends_with?: Maybe<String>;
+  studentID?: Maybe<Int>;
+  studentID_not?: Maybe<Int>;
+  studentID_in?: Maybe<Int[] | Int>;
+  studentID_not_in?: Maybe<Int[] | Int>;
+  studentID_lt?: Maybe<Int>;
+  studentID_lte?: Maybe<Int>;
+  studentID_gt?: Maybe<Int>;
+  studentID_gte?: Maybe<Int>;
+  college?: Maybe<String>;
+  college_not?: Maybe<String>;
+  college_in?: Maybe<String[] | String>;
+  college_not_in?: Maybe<String[] | String>;
+  college_lt?: Maybe<String>;
+  college_lte?: Maybe<String>;
+  college_gt?: Maybe<String>;
+  college_gte?: Maybe<String>;
+  college_contains?: Maybe<String>;
+  college_not_contains?: Maybe<String>;
+  college_starts_with?: Maybe<String>;
+  college_not_starts_with?: Maybe<String>;
+  college_ends_with?: Maybe<String>;
+  college_not_ends_with?: Maybe<String>;
   semesters_every?: Maybe<SemesterWhereInput>;
   semesters_some?: Maybe<SemesterWhereInput>;
   semesters_none?: Maybe<SemesterWhereInput>;
@@ -411,6 +479,11 @@ export interface UserCreateInput {
   mailid: String;
   name?: Maybe<String>;
   averagePoint?: Maybe<Float>;
+  totalPoint?: Maybe<Float>;
+  major?: Maybe<String>;
+  subMajor?: Maybe<String>;
+  studentID?: Maybe<Int>;
+  college?: Maybe<String>;
   semesters?: Maybe<SemesterCreateManyInput>;
 }
 
@@ -571,6 +644,11 @@ export interface UserUpdateManyMutationInput {
   mailid?: Maybe<String>;
   name?: Maybe<String>;
   averagePoint?: Maybe<Float>;
+  totalPoint?: Maybe<Float>;
+  major?: Maybe<String>;
+  subMajor?: Maybe<String>;
+  studentID?: Maybe<Int>;
+  college?: Maybe<String>;
 }
 
 export interface SubjectUpdateManyInput {
@@ -708,6 +786,11 @@ export interface UserUpdateInput {
   mailid?: Maybe<String>;
   name?: Maybe<String>;
   averagePoint?: Maybe<Float>;
+  totalPoint?: Maybe<Float>;
+  major?: Maybe<String>;
+  subMajor?: Maybe<String>;
+  studentID?: Maybe<Int>;
+  college?: Maybe<String>;
   semesters?: Maybe<SemesterUpdateManyInput>;
 }
 
@@ -788,6 +871,11 @@ export interface UserPreviousValues {
   name?: String;
   createdAt: DateTimeOutput;
   averagePoint: Float;
+  totalPoint: Float;
+  major?: String;
+  subMajor?: String;
+  studentID?: Int;
+  college?: String;
 }
 
 export interface UserPreviousValuesPromise
@@ -798,6 +886,11 @@ export interface UserPreviousValuesPromise
   name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   averagePoint: () => Promise<Float>;
+  totalPoint: () => Promise<Float>;
+  major: () => Promise<String>;
+  subMajor: () => Promise<String>;
+  studentID: () => Promise<Int>;
+  college: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -808,6 +901,11 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   averagePoint: () => Promise<AsyncIterator<Float>>;
+  totalPoint: () => Promise<AsyncIterator<Float>>;
+  major: () => Promise<AsyncIterator<String>>;
+  subMajor: () => Promise<AsyncIterator<String>>;
+  studentID: () => Promise<AsyncIterator<Int>>;
+  college: () => Promise<AsyncIterator<String>>;
 }
 
 export interface SemesterEdge {
@@ -1219,6 +1317,11 @@ export interface User {
   name?: String;
   createdAt: DateTimeOutput;
   averagePoint: Float;
+  totalPoint: Float;
+  major?: String;
+  subMajor?: String;
+  studentID?: Int;
+  college?: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -1227,6 +1330,11 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   averagePoint: () => Promise<Float>;
+  totalPoint: () => Promise<Float>;
+  major: () => Promise<String>;
+  subMajor: () => Promise<String>;
+  studentID: () => Promise<Int>;
+  college: () => Promise<String>;
   semesters: <T = FragmentableArray<Semester>>(args?: {
     where?: SemesterWhereInput;
     orderBy?: SemesterOrderByInput;
@@ -1246,6 +1354,11 @@ export interface UserSubscription
   name: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   averagePoint: () => Promise<AsyncIterator<Float>>;
+  totalPoint: () => Promise<AsyncIterator<Float>>;
+  major: () => Promise<AsyncIterator<String>>;
+  subMajor: () => Promise<AsyncIterator<String>>;
+  studentID: () => Promise<AsyncIterator<Int>>;
+  college: () => Promise<AsyncIterator<String>>;
   semesters: <T = Promise<AsyncIterator<SemesterSubscription>>>(args?: {
     where?: SemesterWhereInput;
     orderBy?: SemesterOrderByInput;
@@ -1265,6 +1378,11 @@ export interface UserNullablePromise
   name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   averagePoint: () => Promise<Float>;
+  totalPoint: () => Promise<Float>;
+  major: () => Promise<String>;
+  subMajor: () => Promise<String>;
+  studentID: () => Promise<Int>;
+  college: () => Promise<String>;
   semesters: <T = FragmentableArray<Semester>>(args?: {
     where?: SemesterWhereInput;
     orderBy?: SemesterOrderByInput;

@@ -10,9 +10,14 @@ export const createUser = async (input: UserCreateInput) => {
   const user: PrismaUser = {
     createdAt: new Date().toISOString(),
     ...input,
-    averagePoint: input.averagePoint || 3.5,
-    name: input.name || undefined,
     id: input.id ? input.id.toString() : cuid(),
+    averagePoint: input.averagePoint || 3.5,
+    totalPoint: input.totalPoint || 0.0,
+    name: input.name || undefined,
+    major: input.major || undefined,
+    subMajor: input.subMajor || undefined,
+    studentID: input.studentID || undefined,
+    college: input.college || undefined,
   }
   users.push(user)
   return user
@@ -37,6 +42,7 @@ export const appendUserData = (data: User) =>
       ...users[foundIndex],
       ...others,
       name: others.name || undefined,
+      subMajor: others.subMajor || undefined,
     }
     res(users[foundIndex])
   })

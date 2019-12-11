@@ -4,6 +4,11 @@ type User {
   name: String
   createdAt: DateTime! @createdAt
   averagePoint: Float! @default(value: 0.0)
+  totalPoint: Float! @default(value: 0.0)
+  major: String
+  subMajor: String
+  studentID: Int
+  college: String
   semesters: [Semester!]
 }
 
