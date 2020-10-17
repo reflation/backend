@@ -9,4 +9,4 @@ export const SESSION_EXPIRED = 'session expired'
 export const INVALID_ACCOUNT = 'invalid account'
 
 export const isFetch401 = (str: string) =>
-  [SESSION_EXPIRED, INVALID_ACCOUNT].findIndex(item => item === str) !== -1
+  [SESSION_EXPIRED, INVALID_ACCOUNT].findIndex((item) => item === str) !== -1

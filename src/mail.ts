@@ -1,15 +1,10 @@
 import nodemailer from 'nodemailer'
-import dotenv from 'dotenv'
-import Mail from 'nodemailer/lib/mailer'
+import 'dotenv/config'
 
-// import { TypeEnv } from './@types/env'
+const { service, user, pass } = process.env
 
-dotenv.config()
-// TODO FIX: Type 'ProcessEnv' is missing the following properties from type 'TypeEnv': service, user, pass, secret
-// const { service, user, pass }: TypeEnv = process.env
-const service = process.env.service!
-const user = process.env.user!
-const pass = process.env.pass!
+if (!(service && user && pass))
+  throw Error(`Can't read the mail account from environment variables`)
 
 type TypeMailContent = {
   to: string
@@ -22,7 +17,6 @@ const client = nodemailer.createTransport({
   auth: { user, pass },
 })
 
-// @ts-ignore: Promise<any>
 export const sendMail = ({ to, text, html }: TypeMailContent) =>
   client.sendMail({
     from: `${user}@${service}.com`,

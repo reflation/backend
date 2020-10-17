@@ -6,7 +6,6 @@ import {
 } from '../utils/str2int'
 
 import {
-  PostprocessedList,
   PostprocessedItem,
   ListItem,
   PersonalInfo,
@@ -14,8 +13,8 @@ import {
   GradeSet,
   CurrentSearchedGradeSummary,
 } from '../@types/dreamy'
-import { EnumSemester, Semester, User } from '../@types/models'
-import { ListFormOmit, PostList } from '../@types/params'
+import { EnumSemester, Semester } from '../@types/models'
+import { PostList } from '../@types/params'
 
 const postListItem = (list: ListItem[]) =>
   list.map(({ year, term_gb, outside_seq }) => ({
@@ -37,7 +36,6 @@ export const postList = ({
     nm: name,
     cls_nm: major,
     dbl_dept: subMajor,
-    status_gb,
     student_no: studentID,
     univ_nm: college,
   } = oneDepthLiteral(PERSON_DATA) as PersonalInfo
@@ -65,13 +63,13 @@ export const postItem = (data: Search) => ({
 
 // hack: Encoding Problem?
 const semesterNumStr = {
-  1: '1학기' as '1학기',
-  2: '2학기' as '2학기',
-  '1학기': '1학기' as '1학기',
-  '2학기': '2학기' as '2학기',
-  하기계절: '하기계절' as '하기계절',
-  동기계절: '동기계절' as '동기계절',
-}
+  1: '1학기',
+  2: '2학기',
+  '1학기': '1학기',
+  '2학기': '2학기',
+  하기계절: '하기계절',
+  동기계절: '동기계절',
+} as const
 
 export const postSemesters = (semesters: PostprocessedItem[]): Semester[] =>
   semesters.map(
@@ -92,7 +90,7 @@ export const postSemesters = (semesters: PostprocessedItem[]): Semester[] =>
           dg_gb: grade,
           isu_nm: course,
         }) => ({ title, code, grade, course })
-      ).filter(subject => subject.grade !== 'S')
+      ).filter((subject) => subject.grade !== 'S')
       return {
         subjects,
         averagePoint,

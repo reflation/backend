@@ -1,9 +1,7 @@
-import dotenv from 'dotenv'
-
 import { Request, Response } from 'express'
 
 import { sendMail } from './mail'
-import { login, LoginResult } from './checkVaild'
+import { login } from './checkVaild'
 import { searchUser, appnedUserData } from './models'
 import { domain } from './varables'
 
@@ -11,9 +9,8 @@ import { fetchAndParse } from './fetch'
 import { isFetch401 } from './fetch/consts'
 import { Req, ReqAuth, ResPayload } from './@types/params'
 
-dotenv.config()
-
-const mode = process.env.mode!
+import 'dotenv/config'
+const { mode } = process.env
 
 export const loginRoute = async (
   { body: { mailid } }: Req<{ mailid: string }>,

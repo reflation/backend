@@ -1,18 +1,15 @@
 import request from 'supertest'
 
-import dotenv from 'dotenv'
-
 import app from '.'
 import { signToken } from './jwt'
-import { User } from './@types/models'
 
-interface TypeRes extends request.Response {
-  body: User
-}
+import 'dotenv/config'
+
+const { student_no, student_pw } = process.env
+if (!(student_no && student_pw))
+  throw Error(`Can't read the account from environment variables`)
 
 const invaild = 'INVAILD'
-
-dotenv.config()
 
 jest.mock('./models')
 
@@ -29,9 +26,7 @@ describe('POST /login is', () => {
 })
 
 describe('POST /fetch is', () => {
-  const student_no = parseInt(process.env.student_no!)
-  const student_pw = process.env.student_pw!
-  const form = { student_no, student_pw }
+  const form = { student_no: parseInt(student_no), student_pw }
   const formInVaild = { student_no: invaild, student_pw: invaild }
   describe('send vaild token', () => {
     let token: string
@@ -72,13 +67,7 @@ describe('GET /load', () => {
       token = signToken('muhun')
     })
     it('return 200 status code', (done) =>
-      request(app)
-        .get('/load')
-        .set('Authorization', token)
-        .expect(200)
-        .end((err, res: TypeRes) => {
-          done()
-        }))
+      request(app).get('/load').set('Authorization', token).expect(200, done))
   })
 
   describe('send invaild token', () => {

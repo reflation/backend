@@ -1,9 +1,8 @@
 import request from 'request'
-import { base64Encode } from '../utils/base64'
 
 import { FechParam, ListForm, ListFormOmit, PostList } from '../@types/params'
-import { PostprocessedItem, PersonalInfo } from '../@types/dreamy'
-import { UserNoPw, User, Semester } from '../@types/models'
+import { PostprocessedItem } from '../@types/dreamy'
+import { UserNoPw, User } from '../@types/models'
 
 import {
   BaseURL,
@@ -27,22 +26,24 @@ const getCookie = ({ student_no, student_pw }: UserNoPw) =>
       {
         rejectUnauthorized,
         form: {
-          tmpu: base64Encode(student_no.toString()),
-          tmpw: base64Encode(student_pw),
+          tmpu: Buffer.from(student_no.toString()).toString('base64'),
+          tmpw: Buffer.from(student_pw).toString('base64'),
         },
         headers,
       },
       (err, { headers }, body: string) => {
         if (typeof body === 'string' && body.includes('dbError')) {
-          rej({
-            type: INVALID_ACCOUNT,
-            message: (body.match(
-              /var dbError = "(?:\.|(\\\")|[^\""\n])*"/
-            ) as RegExpMatchArray)[0].slice(15, -1),
-          })
-          return
+          const matchArray = body.match(/var dbError = "(?:\.|(\\")|[^""\n])*"/)
+          if (matchArray) {
+            rej({
+              type: INVALID_ACCOUNT,
+              message: matchArray[0].slice(15, -1),
+            })
+            return
+          }
+          rej('unexpected flow')
         }
-        const cookie = headers['set-cookie']!
+        const cookie = headers['set-cookie']
         cookie
           ? res(`${cookie[0].substring(0, 19)} ${cookie[1]}`)
           : rej({ type: SESSION_EXPIRED })
@@ -51,6 +52,7 @@ const getCookie = ({ student_no, student_pw }: UserNoPw) =>
   })
 
 const listFetcher = ({ form, ...account }: FechParam) =>
+  // eslint-disable-next-line no-async-promise-executor
   new Promise<{ data: PostList; cookie: string }>(async (res, rej) => {
     const cookie = await getCookie(account)
     request.post(
@@ -75,7 +77,7 @@ export const itemFetcher = ({
   form: ListForm
   cookie: string
 }) =>
-  new Promise<PostprocessedItem>(async (res, rej) => {
+  new Promise<PostprocessedItem>((res, rej) => {
     request.post(
       `${BaseURL}/susj/sj/sta_sj_3220q.jejunu`,
       {
@@ -102,14 +104,16 @@ const fetchSemester = ({ cookie, params }: FetchSemesterParams) =>
     cookie,
   })
 
-export const fetchAndParse = async (account: UserNoPw) => {
+export const fetchAndParse = async (
+  account: UserNoPw
+): Promise<Omit<User, 'mailid'>> => {
   const {
     data: { semestersReqParams, ...user },
     cookie,
   } = await fetchList(account)
 
   const rawSemester = await Promise.all(
-    semestersReqParams.map(params => fetchSemester({ cookie, params }))
+    semestersReqParams.map((params) => fetchSemester({ cookie, params }))
   )
   return { ...user, semesters: postSemesters(rawSemester) }
 }

@@ -16,8 +16,8 @@ export type Search = {
 
 // hack(unknown type): type safely for '../@types/dreamy.ts': type 'PostprocessedList' or 'PostprocessedItem'
 export const oneDepthLiteral = (data: Literal): unknown => {
-  let result: NumLiteral = {}
-  Object.keys(data).forEach(key => {
+  const result: NumLiteral = {}
+  Object.keys(data).forEach((key) => {
     const value = data[key]
     if (value.length)
       // isNaN dosn't work with string parameter
@@ -26,8 +26,8 @@ export const oneDepthLiteral = (data: Literal): unknown => {
             value.indexOf('.') === -1 ? parseInt(value) : parseFloat(value))
         : (result[key] = value)
   })
-  return result!
+  return result
 }
 
 export const twoDepthLiteralArray = (data: Literal[]) =>
-  data.map(value => oneDepthLiteral(value))
+  data.map((value) => oneDepthLiteral(value))

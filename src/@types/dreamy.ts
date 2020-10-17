@@ -3,7 +3,6 @@ type SemesterNum = 10 | 11 | 20 | 21
 type RowCount = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 type Status = '재학' | '휴힉'
 type Year = 2018 | 2019
-type BoolInt = 0 | 1
 type Point =
   | 4.3
   | 4.0
@@ -143,16 +142,6 @@ export interface CurrentSearchedGradeSummary extends ParentGradeProps {
   year: Year
   term_gb: SemesterCategory
   outside_gb?: '교류수학'
-}
-
-interface TotalGradeSummary extends ParentGradeProps {
-  cls_cd: string
-  grade: '1학년' | '2학년' | '3학년' | '4학년'
-  nm: string
-  rownum: 0
-  status_gb: Status
-  student_no: number
-  univ_cd: College
 }
 
 export type PostprocessedItem = {
