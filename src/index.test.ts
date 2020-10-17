@@ -9,35 +9,35 @@ const { student_no, student_pw } = process.env
 if (!(student_no && student_pw))
   throw Error(`Can't read the account from environment variables`)
 
-const invaild = 'INVAILD'
+const invalid = 'INVALID'
 
 jest.mock('./models')
 
 describe('POST /login is', () => {
-  const inVaild = { body: { mailid: 'muhunkim' }, code: 401 }
-  const vaild = { body: { mailid: 'muhun' }, code: 201 }
-  const wrapper = ({ body, code }: typeof vaild) =>
+  const inValid = { body: { mailid: 'muhunkim' }, code: 401 }
+  const valid = { body: { mailid: 'muhun' }, code: 201 }
+  const wrapper = ({ body, code }: typeof valid) =>
     describe(`body as '${JSON.stringify(body)}' send`, () => {
       it(`return ${code} status code`, (done) =>
         request(app).post('/login').send(body).expect(code, done))
     })
-  wrapper(inVaild)
-  wrapper(vaild)
+  wrapper(inValid)
+  wrapper(valid)
 })
 
 describe('POST /fetch is', () => {
   const form = { student_no: parseInt(student_no), student_pw }
-  const formInVaild = { student_no: invaild, student_pw: invaild }
-  describe('send vaild token', () => {
+  const formInValid = { student_no: invalid, student_pw: invalid }
+  describe('send valid token', () => {
     let token: string
     beforeEach(() => {
       token = signToken('muhun')
     })
 
-    it('return 401 status code with invaild form', (done) =>
+    it('return 401 status code with invalid form', (done) =>
       request(app)
         .post('/fetch')
-        .send(formInVaild)
+        .send(formInValid)
         .set('Authorization', token)
         .expect(401, done))
 
@@ -50,18 +50,18 @@ describe('POST /fetch is', () => {
     //     .set('Authorization', token)
     //     .expect(201, done))
   })
-  describe('send invaild token', () => {
+  describe('send invalid token', () => {
     it('return 401 status code', (done) =>
       request(app)
         .post('/fetch')
         .send(form)
-        .set('Authorization', 'INVAILD')
+        .set('Authorization', invalid)
         .expect(401, done))
   })
 })
 
 describe('GET /load', () => {
-  describe('send vaild token', () => {
+  describe('send valid token', () => {
     let token: string
     beforeEach(() => {
       token = signToken('muhun')
@@ -70,11 +70,8 @@ describe('GET /load', () => {
       request(app).get('/load').set('Authorization', token).expect(200, done))
   })
 
-  describe('send invaild token', () => {
+  describe('send invalid token', () => {
     it('return 401 status code', (done) =>
-      request(app)
-        .get('/load')
-        .set('Authorization', 'INVAILD')
-        .expect(401, done))
+      request(app).get('/load').set('Authorization', invalid).expect(401, done))
   })
 })
