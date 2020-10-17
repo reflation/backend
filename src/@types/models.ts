@@ -5,23 +5,23 @@ export interface UserNoPw {
   student_pw: string
 }
 
-type Subject = {
+interface Subject {
   title: string
   code: string
   grade: GradePoint
   course: Course
 }
 
-export type Semester = {
+export interface Semester {
   subjects: Subject[]
-  averagePoint: number // Float
+  averagePoint: number
   totalCredit: number
   isOutside: boolean
   semester: 'FIRST' | 'SUMMER' | 'SECOND' | 'WINTER'
   year: number
 }
 
-export type User = {
+export interface User {
   name: string | null
   mailid: string
   studentID: number

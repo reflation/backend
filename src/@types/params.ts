@@ -13,7 +13,7 @@ export interface Res<T> extends Response {
   body: T
 }
 
-export type Payload = {
+export interface Payload {
   mailid: string
   iat: number
   exp: number
@@ -23,11 +23,11 @@ export interface ResPayload extends Response {
   locals: Payload
 }
 
-export type SearchForm = {
+export interface SearchForm {
   mode: 'doSearch'
 }
 
-export type ListForm = {
+export interface ListForm {
   mode: 'doList'
   year: number
   term_gb: 10 | 11 | 20 | 21
@@ -38,7 +38,7 @@ export type ListFormOmit = Omit<ListForm, 'mode'>
 
 export type SearchOrList = SearchForm | ListForm
 
-export type PostList = Omit<User, 'semesters' | 'mailid'> & {
+export interface PostList extends Omit<User, 'semesters' | 'mailid'> {
   semestersReqParams: ListFormOmit[]
 }
 
