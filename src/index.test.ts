@@ -1,5 +1,4 @@
 import request from 'supertest'
-import should from 'should'
 
 import dotenv from 'dotenv'
 
@@ -22,11 +21,8 @@ describe('POST /login is', () => {
   const vaild = { body: { mailid: 'muhun' }, code: 201 }
   const wrapper = ({ body, code }: typeof vaild) =>
     describe(`body as '${JSON.stringify(body)}' send`, () => {
-      it(`return ${code} status code`, done =>
-        request(app)
-          .post('/login')
-          .send(body)
-          .expect(code, done))
+      it(`return ${code} status code`, (done) =>
+        request(app).post('/login').send(body).expect(code, done))
     })
   wrapper(inVaild)
   wrapper(vaild)
@@ -43,7 +39,7 @@ describe('POST /fetch is', () => {
       token = signToken('muhun')
     })
 
-    it('return 401 status code with invaild form', done =>
+    it('return 401 status code with invaild form', (done) =>
       request(app)
         .post('/fetch')
         .send(formInVaild)
@@ -60,7 +56,7 @@ describe('POST /fetch is', () => {
     //     .expect(201, done))
   })
   describe('send invaild token', () => {
-    it('return 401 status code', done =>
+    it('return 401 status code', (done) =>
       request(app)
         .post('/fetch')
         .send(form)
@@ -75,7 +71,7 @@ describe('GET /load', () => {
     beforeEach(() => {
       token = signToken('muhun')
     })
-    it('return 200 status code', done =>
+    it('return 200 status code', (done) =>
       request(app)
         .get('/load')
         .set('Authorization', token)
@@ -86,7 +82,7 @@ describe('GET /load', () => {
   })
 
   describe('send invaild token', () => {
-    it('return 401 status code', done =>
+    it('return 401 status code', (done) =>
       request(app)
         .get('/load')
         .set('Authorization', 'INVAILD')
