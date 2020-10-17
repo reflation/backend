@@ -29,7 +29,8 @@
         "style",
         "test",
         "hack",
-        "merge"
+        "merge",
+        "types"
       ]
     ]
   }
