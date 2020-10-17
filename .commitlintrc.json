@@ -30,7 +30,8 @@
         "test",
         "hack",
         "merge",
-        "types"
+        "types",
+        "config"
       ]
     ]
   }
