@@ -49,7 +49,7 @@ export const appnedUserData = (data: User) => {
   const query: UserUpdateInput = {
     ...data,
     semesters: {
-      create: data.semesters.map(semester => ({
+      create: data.semesters.map((semester) => ({
         ...semester,
         subjects: {
           create: semester.subjects,

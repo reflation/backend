@@ -10,7 +10,7 @@ type Res = {
 }
 
 const isNotVaild = (mailid: string) =>
-  new Promise<boolean>((res, rej) => {
+  new Promise<boolean>((res) => {
     request.post(
       'https://webmail.jejunu.ac.kr/idCheck.json',
       {

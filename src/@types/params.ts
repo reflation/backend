@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
-import { Dictionary } from 'lodash'
 import { UserNoPw, User } from './models'
 
-export interface ReqAuth extends Request<Dictionary<string>> {
+export interface ReqAuth extends Request {
   body: UserNoPw
 }
 

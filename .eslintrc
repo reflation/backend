@@ -1,20 +1,19 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint/tslint"],
-  "parserOptions": { "project": "./tsconfig.json", "sourceType": "module" },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
   "env": {
     "node": true
   },
-  "globals": {
-    "exampleGlobalVariable": true
-  },
   "rules": {
-    "@typescript-eslint/tslint/config": [
-      1,
-      {
-        "lintFile": "./tslint.json"
-      }
-    ],
-    "eqeqeq": 2
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-unused-vars": "error"
   }
 }

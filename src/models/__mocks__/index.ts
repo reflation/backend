@@ -1,4 +1,4 @@
-import { User as PrismaUser, UserCreateInput, UserPromise } from '../prisma'
+import { User as PrismaUser, UserCreateInput } from '../prisma'
 import { User } from '../../@types/models'
 import cuid from 'cuid'
 
@@ -25,17 +25,17 @@ export const createUser = async (input: UserCreateInput) => {
 
 export const searchUser = (mailid: string) =>
   new Promise<PrismaUser>((res, rej) => {
-    const user = users.find(user => user.mailid === mailid)
+    const user = users.find((user) => user.mailid === mailid)
     user ? res(user) : rej(Error('Cannot find the ' + mailid))
   })
 
 export const isUserExist = (mailid: string) =>
-  Promise.resolve(users.some(user => user.mailid === mailid))
+  Promise.resolve(users.some((user) => user.mailid === mailid))
 
 export const appendUserData = (data: User) =>
   new Promise<PrismaUser>((res, rej) => {
     const { mailid, ...others } = data
-    const foundIndex = users.findIndex(user => user.mailid === mailid)
+    const foundIndex = users.findIndex((user) => user.mailid === mailid)
     if (foundIndex === -1)
       rej(new Error('Cannot find user with mailid: ' + mailid))
     users[foundIndex] = {
